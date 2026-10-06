@@ -9,13 +9,15 @@ import { STIMULI } from "./network.mjs";
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
 // Read a user message and decide which neurons to poke. Crude on purpose, so you can see how it works.
+// Accepts anything: null, numbers and odd unicode are turned into a string first, so it never throws.
 export function stimuliFromText(text) {
-  const t = text.toLowerCase();
+  const raw = String(text ?? "");
+  const t = raw.toLowerCase();
   const out = new Set();
   if (/\?/.test(t)) out.add("nose-touch");                                   // a question is something to bump into
-  if (/(!|asap|urgent|now|hurry|broken|error|wrong|bad|hate)/.test(t)) out.add("noxious");
-  if (/(thanks|thank you|great|love|nice|good|please|cool|awesome)/.test(t)) out.add("food-smell");
-  if (text.length > 280) out.add("touch-head");                              // a wall of text hits the head
+  if (/!|\b(asap|urgent|now|hurry|broken|error|wrong|bad|hate)\b/.test(t)) out.add("noxious");
+  if (/\b(thanks|thank you|great|love|nice|good|please|cool|awesome)\b/.test(t)) out.add("food-smell");
+  if ([...raw].length > 280) out.add("touch-head");                          // a wall of text hits the head (counted in characters, not bytes)
   if (out.size === 0) out.add("touch-tail");                                 // a plain statement nudges it forward
   return [...out];
 }

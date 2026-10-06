@@ -47,11 +47,17 @@ neurons = sorted({n for n in neuron_names if n in all_labels})
 print("neurons found:", len(neurons))
 
 def cls(n):
+    # coarse class from the WormAtlas "Type" string shipped in all_cell_info.csv.
+    # "Touch" covers the touch receptor and touch related cells (ALN, PLN, SDQ, AQR, PQR),
+    # and "O2, CO2" covers the gas sensing BAG and URX cells, so both count as sensory.
+    # "Linker to pharynx" (RIP) is an interneuron. What is left in "other" is the pharyngeal
+    # polymodal cells (MC, MI, NSM) and the canal cells (CAN).
     t = info.get(n, {}).get("Type", "")
     t = t.lower()
     if "sensory" in t or "amphid" in t or "mechano" in t or "cephalic" in t or "phasmid" in t: return "sensory"
+    if "touch" in t or "o2" in t: return "sensory"
     if "motor" in t: return "motor"
-    if "interneuron" in t: return "inter"
+    if "interneuron" in t or "linker" in t: return "inter"
     return "other"
 
 ns = set(neurons)

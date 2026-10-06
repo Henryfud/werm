@@ -39,6 +39,13 @@ export const STIMULI = {
   "noxious": { label: "Something nasty", cells: ["ASHL", "ASHR", "ADLL", "ADLR"], amp: 1.6 },
 };
 
+// Where a neuron settles with zero drive: set dx/dt = 0 with f = sigmoid(-fSlope * fOffset).
+// Activation is measured from this point, so a network with no input stays at rest instead of slowly igniting.
+export function restState({ tau, amp, fSlope, fOffset }) {
+  const f0 = 1 / (1 + Math.exp(fSlope * fOffset));
+  return (f0 * amp) / (1 / tau + f0);
+}
+
 // small seeded PRNG so runs are reproducible
 export function mulberry32(seed) {
   let a = seed >>> 0;
@@ -79,7 +86,9 @@ export class WormBrain {
     this.chemNorm = this.chemIn.map((l) => 1 / Math.max(1.5, Math.pow(l.reduce((a, [, w]) => a + Math.abs(w), 0), np)));
     this.gapNorm = this.gapIn.map((l) => 1 / Math.max(1.5, Math.pow(l.reduce((a, [, w]) => a + w, 0), np)));
 
-    this.x = new Float64Array(N).fill(0.05);
+    // start every neuron at the point it settles to with no input at all
+    this.xRest = restState(this.p);
+    this.x = new Float64Array(N).fill(this.xRest);
     this.act = new Float64Array(N);
     this.ext = new Float64Array(N);
     this.t = 0;
@@ -88,8 +97,8 @@ export class WormBrain {
 
   _refreshActivation() {
     const { gain, threshold } = this.p;
-    // subtract what a resting neuron would put out, so a quiet worm is quiet
-    const base = 1 / (1 + Math.exp(-gain * (0.07 - threshold)));
+    // subtract what a resting neuron puts out, so a quiet worm is quiet
+    const base = 1 / (1 + Math.exp(-gain * (this.xRest - threshold)));
     for (let i = 0; i < this.N; i++) {
       const a = 1 / (1 + Math.exp(-gain * (this.x[i] - threshold)));
       this.act[i] = Math.max(0, (a - base) / (1 - base));

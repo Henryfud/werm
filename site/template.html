@@ -46,7 +46,11 @@ a { color: inherit; }
   padding-block: 16px;
 }
 .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.logo { font-weight: 600; font-size: 22px; letter-spacing: -0.03em; text-decoration: none; }
+.logo { font-weight: 600; font-size: 22px; letter-spacing: -0.03em; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+.logo img { width: 30px; height: 30px; image-rendering: pixelated; border-radius: 4px; }
+.navend { display: flex; align-items: center; gap: 10px; }
+.xlink { display: inline-grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--rule); border-radius: 3px; color: var(--paper); }
+.xlink:hover { border-color: var(--lime); color: var(--lime); }
 .logo b { color: var(--lime); font-weight: 600; }
 .nav nav { display: flex; gap: 22px; font-family: var(--mono); font-size: 12px; }
 .nav nav a { text-decoration: none; opacity: 0.85; }
@@ -113,6 +117,13 @@ h3 { font-size: 26px; letter-spacing: -0.02em; margin: 44px 0 12px; font-weight:
 .frame { border: 1.5px solid var(--paper); border-radius: 14px; background: rgba(3, 5, 15, 0.82); overflow: hidden; }
 .frame .bar { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-bottom: 1px dashed var(--paper); font-family: var(--mono); font-size: 11px; flex-wrap: wrap; }
 
+/* four ideas */
+section.about { padding-block: 40px 0; }
+.ideas { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0; border: 1.5px solid var(--paper); border-radius: 14px; background: rgba(3, 5, 15, 0.86); overflow: hidden; }
+.ideas div { padding: 18px 18px 20px; border-right: 1px dashed var(--rule); border-bottom: 1px dashed var(--rule); margin: 0 -1px -1px 0; }
+.ideas h4 { font-family: var(--mono); font-weight: 500; font-size: 12px; color: var(--lime); margin: 0 0 8px; }
+.ideas p { margin: 0; font-size: 15px; line-height: 1.5; }
+
 /* globe */
 #globeWrap { position: relative; aspect-ratio: 1 / 0.92; max-width: 100%; }
 #globe { width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
@@ -127,6 +138,15 @@ h3 { font-size: 26px; letter-spacing: -0.02em; margin: 44px 0 12px; font-weight:
 .controls button:hover { border-color: var(--lime); }
 .controls button[aria-pressed="true"] { background: var(--lime); color: var(--ink); border-color: var(--lime); }
 .meters { display: grid; gap: 12px; }
+.cmpbtn { margin-top: 18px; }
+.cmp { margin-top: 14px; display: grid; gap: 12px; }
+.cmp p { margin: 0; line-height: 1.7; opacity: 0.8; }
+.dmeter { font-family: var(--mono); font-size: 11px; }
+.dmeter .row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.dtrack { position: relative; height: 12px; border: 1px solid var(--paper); border-radius: 2px; background: rgba(3, 5, 15, 0.7); overflow: hidden; }
+.dtrack i { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--paper); }
+.dfill { position: absolute; top: 0; bottom: 0; left: 50%; width: 0; background: var(--lime); }
+.dfill.s { background: var(--violet); }
 .meter { font-family: var(--mono); font-size: 11px; }
 .meter .row { display: flex; justify-content: space-between; margin-bottom: 4px; }
 .meter .track { height: 10px; border: 1px solid var(--paper); border-radius: 2px; overflow: hidden; background: rgba(3, 5, 15, 0.7); }
@@ -152,11 +172,18 @@ h3 { font-size: 26px; letter-spacing: -0.02em; margin: 44px 0 12px; font-weight:
 
 /* genome */
 .chroms { display: grid; gap: 14px; padding: 18px 14px; }
-.chrom { display: grid; grid-template-columns: 38px minmax(0, 1fr) 84px; gap: 12px; align-items: center; font-family: var(--mono); font-size: 11px; }
-.chrom .bar { height: 22px; border-radius: 11px; background: linear-gradient(90deg, var(--blue), var(--violet)); position: relative; min-width: 8px; }
-.chrom .bar::after { content: ""; position: absolute; inset: 0; border-radius: 11px; background-image: radial-gradient(rgba(201, 255, 46, 0.65) 1px, transparent 1.4px); background-size: 6px 6px; opacity: 0.35; }
+.chrom { display: grid; grid-template-columns: 54px minmax(0, 1fr) 84px; gap: 12px; align-items: center; font-family: var(--mono); font-size: 11px; }
+.chrom .strips { display: grid; gap: 2px; }
+.chrom canvas { display: block; width: 100%; height: 14px; image-rendering: pixelated; border-radius: 3px; }
+.chrom canvas.gn { height: 8px; }
+.gkey { display: grid; gap: 6px; padding: 0 14px 16px; color: var(--dim); font-size: 10px; line-height: 1.6; }
+.gkey .sw { display: inline-block; width: 22px; height: 8px; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
+.gkey .sw.gc { background: linear-gradient(90deg, #3333ea, #8a22b8, #be50e8, #c9ff2e); }
+.gkey .sw.gn { background: linear-gradient(90deg, #05071a, #3333ea, #c9ff2e); }
 .chrom .len { text-align: right; font-variant-numeric: tabular-nums; }
-.scale { display: flex; justify-content: space-between; padding: 0 14px 14px 64px; padding-right: 98px; font-family: var(--mono); font-size: 10px; color: var(--dim); }
+.scale { padding: 0 110px 26px 80px; font-family: var(--mono); font-size: 10px; color: var(--dim); }
+#scaleTicks { position: relative; height: 1px; }
+#scaleTicks span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; }
 .drop { padding: 16px 14px; border-top: 1px dashed var(--paper); }
 .drop input[type=file] { font-family: var(--mono); font-size: 11px; color: var(--paper); max-width: 100%; }
 #gcOut { display: grid; gap: 12px; margin-top: 14px; font-family: var(--mono); font-size: 11px; }
@@ -203,14 +230,17 @@ footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-
 <div class="page">
   <header class="nav">
     <div class="wrap">
-      <a class="logo" href="#top">WERM</a>
+      <a class="logo" href="#top"><img src="__LOGO__" alt="" width="30" height="30">WERM</a>
       <nav aria-label="Sections">
         <a href="#brain">Brain</a>
         <a href="#body">Body</a>
         <a href="#genome">Genome</a>
         <a href="#notes">Notes</a>
       </nav>
-      <a class="btn" data-gh href="https://github.com/Henryfud/werm">GitHub</a>
+      <div class="navend">
+        <a class="xlink" href="__X_URL__" aria-label="WERM on X" rel="me noopener" target="_blank"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a class="btn" data-gh href="__GITHUB_URL__">GitHub</a>
+      </div>
     </div>
   </header>
 
@@ -239,6 +269,17 @@ footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-
     </div>
   </section>
 
+  <section class="band about" id="about" aria-label="Four ideas behind WERM">
+    <div class="wrap">
+      <div class="ideas">
+        <div><h4>Connectome</h4><p>The full list of which neurons connect to which. This one was traced from electron microscope images of real worms and published by Steven Cook and colleagues in 2019.</p></div>
+        <div><h4>Genome</h4><p>The DNA that builds the worm, about 100 million letters on six chromosomes. It does not run the brain here. It is drawn to scale further down, measured from the reference sequence.</p></div>
+        <div><h4>Liquid time constant</h4><p>Each model neuron has a gate that opens with input, and the more input it gets, the faster it moves. The idea is borrowed, in a very small form, from the liquid networks built at MIT.</p></div>
+        <div><h4>Steering</h4><p>The worm's state sets a few dials on a language model, such as how adventurous its word choices are. The model still writes every word. The worm only nudges the dials.</p></div>
+      </div>
+    </div>
+  </section>
+
   <section class="band solid" id="brain">
     <div class="wrap">
       <h2>The brain, on a globe</h2>
@@ -261,6 +302,12 @@ footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-
             <div class="meter f"><div class="row"><span>forward command (AVB, PVC)</span><b id="mF">0.00</b></div><div class="track"><div class="fill" id="bF"></div></div></div>
             <div class="meter b"><div class="row"><span>backward command (AVA, AVD, AVE)</span><b id="mB">0.00</b></div><div class="track"><div class="fill" id="bB"></div></div></div>
             <div class="meter"><div class="row"><span>whole network arousal</span><b id="mA">0.00</b></div><div class="track"><div class="fill" id="bA"></div></div></div>
+          </div>
+          <button type="button" class="btn ghost cmpbtn" id="cmpToggle" aria-expanded="false" aria-controls="cmp">Compare with shuffled wiring</button>
+          <div class="cmp" id="cmp" hidden>
+            <p class="mono">The same input, sent to two brains at once. The second has the same neurons, and every neuron keeps exactly as many connections in and out, but who connects to whom is shuffled. Left of centre is backing up, right is crawling forward.</p>
+            <div class="dmeter"><div class="row"><span>real wiring</span><b id="cR">0.00</b></div><div class="dtrack"><i></i><div class="dfill" id="dR"></div></div></div>
+            <div class="dmeter"><div class="row"><span>shuffled wiring</span><b id="cS">0.00</b></div><div class="dtrack"><i></i><div class="dfill s" id="dS"></div></div></div>
           </div>
           <p class="mono" style="margin-top:18px;opacity:.75;line-height:1.7">Touching the tail should push the forward command up. Touching the head and bumping the nose should push the backward command up. The model gets three of those four right. The notes below say which one it misses and why.</p>
         </div>
@@ -335,22 +382,29 @@ node src/cli.mjs chat --model llama3.2</div>
   <section class="band solid" id="genome">
     <div class="wrap">
       <h2>The genome, to scale</h2>
-      <p class="sub">About 100 million letters of DNA on six chromosomes. In 1998 it became the first animal genome to be fully sequenced. These bars are drawn from the real chromosome lengths in the NCBI reference, GCF_000002985.6.</p>
+      <p class="sub">About 100 million letters of DNA on six chromosomes. These bars are drawn to scale from the NCBI reference, GCF_000002985.6. Each one is two maps measured from the real sequence and its gene annotation, one pixel per 100,000 letters.</p>
       <div class="twocol">
         <div class="frame">
           <div class="bar"><span>REFERENCE GENOME / C. ELEGANS</span><span>megabases</span></div>
           <div class="chroms" id="chroms"></div>
-          <div class="scale"><span>0</span><span>5</span><span>10</span><span>15</span><span>20 Mb</span></div>
+          <div class="scale"><div id="scaleTicks"></div></div>
+          <div class="gkey mono">
+            <span><i class="sw gc"></i>top strip: GC content. Blue is the most A and T rich, lime the most G and C rich (<span id="gcRange"></span>)</span>
+            <span><i class="sw gn"></i>bottom strip: protein coding genes per window, brighter means more (<span id="geneRange"></span>)</span>
+          </div>
           <div class="drop">
-            <div class="mono" style="margin-bottom:10px">Want the letters themselves? Run the fetch script once, then drop the FASTA file here. Your browser reads it locally and draws a GC map. Nothing is uploaded.</div>
+            <div class="mono" style="margin-bottom:10px">Want to check it yourself? Run the fetch script, then drop the FASTA file here. Your browser reads it locally and draws the same GC map from scratch. Nothing is uploaded.</div>
             <input type="file" id="fasta" accept=".fa,.fasta,.fna,.txt" aria-label="Choose a genome FASTA file">
             <div id="gcOut"></div>
           </div>
         </div>
         <div>
           <div class="code" id="fetchCode"><button class="copy" data-copy="fetchCode">copy</button>bash scripts/fetch_genome.sh
-node scripts/genome_stats.mjs data/genome/c_elegans.fasta</div>
-          <p class="mono" style="margin:14px 0 0;opacity:.75;line-height:1.7">The script pulls the six chromosomes and the mitochondrial genome from NCBI by accession number and joins them into one file. I could not download the sequence while building this page, so I did not draw a fake one. What you see above is measured. What you load is yours.</p>
+node scripts/genome_stats.mjs data/genome/c_elegans.fasta
+node scripts/gc_windows.mjs data/genome/c_elegans.fasta
+bash scripts/fetch_annotation.sh
+node scripts/gene_windows.mjs data/genome/annotation.gff.gz</div>
+          <p class="mono" style="margin:14px 0 0;opacity:.75;line-height:1.7">The fetch script pulls the six chromosomes and the mitochondrial genome from NCBI by accession number and joins them into one file. The maps on this page were made from that file and from the RefSeq gene annotation (WormBase release WS298) by two short scripts in the repo, so every pixel can be traced back to the sequence.</p>
         </div>
       </div>
       <div class="facts" id="facts"></div>
@@ -465,7 +519,8 @@ node src/cli.mjs chat --model llama3.2</div>
     <div class="wrap">
       <p class="big">Take it<br>apart.</p>
       <div style="display:grid;gap:12px;justify-items:start">
-        <a class="btn" data-gh href="https://github.com/Henryfud/werm">Open the repo on GitHub</a>
+        <a class="btn" data-gh href="__GITHUB_URL__">Open the repo on GitHub</a>
+        <a class="mono" href="__X_URL__" rel="me noopener" target="_blank" style="opacity:.8">Follow @WERM_si on X</a>
         <span class="mono" style="opacity:.7">MIT licensed. Connectome data from Cook et al. 2019 via OpenWorm.</span>
       </div>
     </div>
@@ -473,7 +528,7 @@ node src/cli.mjs chat --model llama3.2</div>
 </div>
 
 <script>
-/*__CONNECTOME__*/
+/*__DATA__*/
 /*__NETWORK__*/
 </script>
 <script>
@@ -500,6 +555,10 @@ document.querySelectorAll(".copy").forEach((b) => b.addEventListener("click", as
 /* ---------- the brain ---------- */
 const brain = new WormBrain(CONNECTOME);
 brain.run(1.2);
+// the compare panel: same neurons, degree preserving shuffle of the wiring (src/graphs.mjs), fixed seed
+const shuffled = new WormBrain(rewire(CONNECTOME, 1));
+shuffled.run(1.2);
+let comparing = false;
 const neurons = CONNECTOME.neurons;
 const edgesTotal = CONNECTOME.edges.length;
 let synapseSum = 0; for (const e of CONNECTOME.edges) synapseSum += e.w;
@@ -509,9 +568,11 @@ $("heroNeurons").textContent = neurons.length;
 const state = { stim: new Set(), auto: true, autoTimer: 0, autoKey: null, picked: null, pickedOn: false };
 const stimKeys = Object.keys(STIMULI);
 function refreshInputs() {
-  brain.clearInput();
-  for (const k of state.stim) brain.stimulate(k, true);
-  if (state.picked != null && state.pickedOn) brain.setInput([neurons[state.picked].id], 1.8);
+  for (const b of [brain, shuffled]) {
+    b.clearInput();
+    for (const k of state.stim) b.stimulate(k, true);
+    if (state.picked != null && state.pickedOn) b.setInput([neurons[state.picked].id], 1.8);
+  }
   document.querySelectorAll("[data-stim]").forEach((b) => b.setAttribute("aria-pressed", String(state.stim.has(b.dataset.stim))));
   const names = [...state.stim];
   if (state.picked != null && state.pickedOn) names.push(neurons[state.picked].id);
@@ -532,6 +593,14 @@ function buildButtons(host) {
 }
 buildButtons($("stimButtons"));
 buildButtons($("bodyButtons"));
+
+$("cmpToggle").addEventListener("click", () => {
+  comparing = !comparing;
+  $("cmp").hidden = !comparing;
+  $("cmpToggle").setAttribute("aria-expanded", String(comparing));
+  $("cmpToggle").textContent = comparing ? "Hide the shuffled wiring" : "Compare with shuffled wiring";
+  if (comparing) { shuffled.x.set(brain.x); }   // start both from the same state
+});
 
 /* demo input so the page is alive before anyone touches it */
 function autoStep(dt) {
@@ -827,18 +896,40 @@ globe.addEventListener("pointerup", (e) => {
 });
 
 /* ---------- genome section ---------- */
-const CHR = [["I", 15072434], ["II", 15279421], ["III", 13783801], ["IV", 17493829], ["V", 20924180], ["X", 17718942]];
+// GC and gene density come from data/gc_windows.json and data/gene_windows.json, inlined at build time
 {
   const max = 21000000, host = $("chroms");
-  CHR.forEach(([n, len]) => {
+  const allGc = GC_WINDOWS.chromosomes.flatMap((c) => c.gc);
+  const gcLo = Math.min(...allGc), gcHi = Math.max(...allGc);
+  const allGenes = GENE_WINDOWS.chromosomes.flatMap((c) => c.genes);
+  const gMax = Math.max(...allGenes);
+  $("gcRange").textContent = gcLo.toFixed(1) + "% to " + gcHi.toFixed(1) + "% GC";
+  $("geneRange").textContent = "0 to " + gMax + " genes";
+  const tone = (v) => (v > 0.78 ? PAL.lime : v > 0.55 ? PAL.orchid : v > 0.3 ? PAL.violet : PAL.blue);
+  const strip = (vals, cls, colour) => {
+    const cv = document.createElement("canvas"); cv.className = cls; cv.width = vals.length; cv.height = 1;
+    const cx = cv.getContext("2d"), im = cx.createImageData(vals.length, 1);
+    vals.forEach((v, i) => { const c = colour(v); im.data.set([c[0], c[1], c[2], 255], i * 4); });
+    cx.putImageData(im, 0, 0);
+    return cv;
+  };
+  GC_WINDOWS.chromosomes.forEach((c, k) => {
+    const genes = GENE_WINDOWS.chromosomes[k].genes;
     const row = document.createElement("div"); row.className = "chrom";
-    row.innerHTML = "<span>chr " + n + "</span><div style='position:relative'><div class='bar' style='width:" + (len / max * 100).toFixed(2) + "%' title='chromosome " + n + ", " + len.toLocaleString() + " bases'></div></div><span class='len'>" + (len / 1e6).toFixed(2) + " Mb</span>";
-    host.appendChild(row);
+    const lab = document.createElement("span"); lab.textContent = "chr " + c.name;
+    const box = document.createElement("div"); box.className = "strips"; box.style.width = (c.length / max * 100).toFixed(2) + "%";
+    box.title = "chromosome " + c.name + ", " + c.length.toLocaleString() + " bases, " + genes.reduce((a, b) => a + b, 0).toLocaleString() + " protein coding genes";
+    box.appendChild(strip(c.gc, "gc", (v) => tone((v - gcLo) / (gcHi - gcLo))));
+    box.appendChild(strip(genes, "gn", (v) => { const t = v / gMax; return t > 0.7 ? PAL.lime : t > 0.45 ? PAL.blue : t > 0.2 ? [26, 26, 120] : [10, 12, 40]; }));
+    const wrapBox = document.createElement("div"); wrapBox.appendChild(box);
+    const len = document.createElement("span"); len.className = "len"; len.textContent = (c.length / 1e6).toFixed(2) + " Mb";
+    row.append(lab, wrapBox, len); host.appendChild(row);
   });
+  $("scaleTicks").innerHTML = [0, 5, 10, 15, 20].map((m) => "<span style='left:" + (m * 1e6 / max * 100).toFixed(2) + "%'>" + m + (m === 20 ? " Mb" : "") + "</span>").join("");
   const mt = document.createElement("div"); mt.className = "chrom";
   mt.innerHTML = "<span>chr MT</span><div class='mono' style='opacity:.7'>circular, too small to see at this scale</div><span class='len'>13.8 kb</span>"; host.appendChild(mt);
-  const total = CHR.reduce((a, c) => a + c[1], 0);
-  const facts = [[(total / 1e6).toFixed(1) + " Mb", "six chromosomes, summed from the reference"], ["~65%", "of the letters are A or T"], ["19,985", "protein coding genes, WormBase 2022"], ["49,187", "genes of all kinds in the same annotation"], ["302", "neurons wired in this page"], ["959", "somatic cells in the adult hermaphrodite"]];
+  const total = GC_WINDOWS.chromosomes.reduce((a, c) => a + c.length, 0);
+  const facts = [[(total / 1e6).toFixed(1) + " Mb", "six chromosomes, summed from the reference"], ["35.4%", "G or C, measured from the sequence, so about 65% A or T"], [GENE_WINDOWS.proteinCodingNuclear.toLocaleString(), "protein coding genes on the six chromosomes, WormBase WS298"], ["302", "neurons wired in this page"], ["13,794", "letters in the circular mitochondrial genome"], ["1998", "the year the genome sequence was published"]];
   $("facts").innerHTML = facts.map(([n, l]) => "<div><div class='n'>" + n + "</div><div class='l'>" + l + "</div></div>").join("");
 }
 $("fasta").addEventListener("change", async (ev) => {
@@ -899,7 +990,7 @@ function loop(now) {
   const sy = window.scrollY; const dyF = sy - scrollY; const kick = dyF > 12 ? 1 : dyF < -12 ? -1 : 0; scrollV += ((sy - scrollY) / Math.max(dt, 0.001) / 1000 - scrollV) * Math.min(1, dt * 6); scrollY = sy;
   autoStep(dt);
   acc += dt * 1.4;
-  while (acc >= brain.p.dt) { brain.step(); acc -= brain.p.dt; }
+  while (acc >= brain.p.dt) { brain.step(); if (comparing) shuffled.step(); acc -= brain.p.dt; }
   const r = brain.readout();
   const drive = clamp(r.drive * 4, -1.4, 1.4);
   const sv = Math.abs(scrollV);
@@ -920,6 +1011,13 @@ function loop(now) {
     $("bF").style.width = clamp(r.forward * 100, 0, 100) + "%"; $("bB").style.width = clamp(r.backward * 100, 0, 100) + "%"; $("bA").style.width = clamp(r.arousal * 250, 0, 100) + "%";
     $("sTemp").textContent = s.options.temperature.toFixed(2); $("sTop").textContent = s.options.top_p.toFixed(2); $("sRep").textContent = s.options.repeat_penalty.toFixed(2); $("sNum").textContent = s.options.num_predict;
     if (state.picked != null) describePick();
+    if (comparing) {
+      const rs = shuffled.readout();
+      for (const [v, bar, lab] of [[r.drive, "dR", "cR"], [rs.drive, "dS", "cS"]]) {
+        const w = clamp(Math.abs(v) * 125, 0, 50);
+        $(bar).style.width = w + "%"; $(bar).style.left = (v >= 0 ? 50 : 50 - w) + "%"; $(lab).textContent = v.toFixed(2);
+      }
+    }
   }
   anatProgress();
   requestAnimationFrame(loop);
