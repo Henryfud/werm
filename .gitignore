@@ -4,3 +4,6 @@ data/genome/
 .venv/
 dl/
 test-results/
+
+# Local Netlify folder
+.netlify
