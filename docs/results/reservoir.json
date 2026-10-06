@@ -1,0 +1,1476 @@
+{
+ "generated": "2026-10-06",
+ "graphsPerKind": 100,
+ "settings": {
+  "HOLD": 10,
+  "WASH": 200,
+  "TRAIN": 2000,
+  "TEST": 1000,
+  "DELAYS": 30,
+  "IN_GAIN": 1.6,
+  "RIDGE": 0.0001,
+  "inputSeed": 7
+ },
+ "summary": {
+  "memory": {
+   "real": 1.9326391760266275,
+   "rewired": {
+    "mean": 2.2683364161503725,
+    "sd": 0.12569462432946418,
+    "min": 2.0902057785282797,
+    "max": 3.320919582561485,
+    "realPercentile": 0
+   },
+   "random": {
+    "mean": 2.0194570677005443,
+    "sd": 0.07905532962263709,
+    "min": 1.9184771158686986,
+    "max": 2.6395633260466833,
+    "realPercentile": 1
+   }
+  },
+  "narma": {
+   "real": 0.7723629787477134,
+   "rewired": {
+    "mean": 0.7668719736191295,
+    "sd": 0.006881971222160305,
+    "min": 0.7073876382875688,
+    "max": 0.7743141450049706,
+    "realPercentile": 96
+   },
+   "random": {
+    "mean": 0.7739068228777485,
+    "sd": 0.003588573288673249,
+    "min": 0.7439377389498734,
+    "max": 0.7787687930751496,
+    "realPercentile": 22
+   }
+  },
+  "activeMean": {
+   "real": 39.428,
+   "rewired": {
+    "mean": 0.03727,
+    "sd": 0.36621867388214985,
+    "min": 0,
+    "max": 3.681,
+    "realPercentile": 100
+   },
+   "random": {
+    "mean": 0.03,
+    "sd": 0.29849623113198587,
+    "min": 0,
+    "max": 3,
+    "realPercentile": 100
+   }
+  }
+ },
+ "rows": [
+  {
+   "kind": "real",
+   "seed": 0,
+   "memory": 1.9326391760266275,
+   "narma": 0.7723629787477134,
+   "activeMean": 39.428
+  },
+  {
+   "kind": "rewired",
+   "seed": 1,
+   "memory": 2.1943419979249,
+   "narma": 0.7678544257931902,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 1,
+   "memory": 2.0204313598433377,
+   "narma": 0.7745060427527969,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 2,
+   "memory": 2.3276708390047287,
+   "narma": 0.7682721491339892,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 2,
+   "memory": 2.0831473168215906,
+   "narma": 0.7709486248872529,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 3,
+   "memory": 2.3248137904968473,
+   "narma": 0.7686302414884674,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 3,
+   "memory": 2.052563691119378,
+   "narma": 0.7699970457620432,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 4,
+   "memory": 2.2614634415865393,
+   "narma": 0.7640517315589386,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 4,
+   "memory": 1.9184771158686986,
+   "narma": 0.7772170233638721,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 5,
+   "memory": 2.219776248029068,
+   "narma": 0.7650389204206091,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 5,
+   "memory": 1.9622299739802338,
+   "narma": 0.7746743692825558,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 6,
+   "memory": 2.2682989468434194,
+   "narma": 0.7700096891685146,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 6,
+   "memory": 1.966219887135805,
+   "narma": 0.7750707601853283,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 7,
+   "memory": 2.2763520478240853,
+   "narma": 0.7669486176261376,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 7,
+   "memory": 2.0071877556254423,
+   "narma": 0.7745854773363522,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 8,
+   "memory": 2.236346042011628,
+   "narma": 0.7648566132039286,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 8,
+   "memory": 2.049279806897561,
+   "narma": 0.7733957261036675,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 9,
+   "memory": 2.171023970485841,
+   "narma": 0.7713980289096483,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 9,
+   "memory": 2.0277249255288705,
+   "narma": 0.7766513903971313,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 10,
+   "memory": 2.2248953161290306,
+   "narma": 0.7682570391304286,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 10,
+   "memory": 1.979431132550216,
+   "narma": 0.7725280000980576,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 11,
+   "memory": 2.2725884696746737,
+   "narma": 0.7682159514961445,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 11,
+   "memory": 1.9787976354519965,
+   "narma": 0.7747635145176442,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 12,
+   "memory": 2.306455404954104,
+   "narma": 0.7646840276735402,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 12,
+   "memory": 1.9959458717387277,
+   "narma": 0.7721995955856051,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 13,
+   "memory": 2.3082124267122803,
+   "narma": 0.7637401611971582,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 13,
+   "memory": 1.9975335923059383,
+   "narma": 0.776194868769711,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 14,
+   "memory": 2.2550862882793705,
+   "narma": 0.7709103432126138,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 14,
+   "memory": 2.0141719892124055,
+   "narma": 0.7752186362682653,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 15,
+   "memory": 3.320919582561485,
+   "narma": 0.7073876382875688,
+   "activeMean": 3.681
+  },
+  {
+   "kind": "random",
+   "seed": 15,
+   "memory": 2.0216212258086674,
+   "narma": 0.7743367006603502,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 16,
+   "memory": 2.294013000559274,
+   "narma": 0.7680922695890648,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 16,
+   "memory": 2.011878501313962,
+   "narma": 0.7769376746525456,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 17,
+   "memory": 2.3186545167131274,
+   "narma": 0.7661935808076602,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 17,
+   "memory": 2.009955105277299,
+   "narma": 0.7735222796600981,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 18,
+   "memory": 2.4040785622467724,
+   "narma": 0.7674255710293956,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 18,
+   "memory": 2.0681975234341543,
+   "narma": 0.771562252542858,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 19,
+   "memory": 2.292477950892679,
+   "narma": 0.766763826334477,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 19,
+   "memory": 1.9363802499482965,
+   "narma": 0.7764557026034113,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 20,
+   "memory": 2.2582615528086643,
+   "narma": 0.7664277288653715,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 20,
+   "memory": 2.089054077149047,
+   "narma": 0.7720129573066771,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 21,
+   "memory": 2.2795405391958248,
+   "narma": 0.7674950050450383,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 21,
+   "memory": 2.0757695224811594,
+   "narma": 0.7742842285438899,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 22,
+   "memory": 2.1992956025848835,
+   "narma": 0.7721213353509645,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 22,
+   "memory": 2.086252404416771,
+   "narma": 0.7715793583129916,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 23,
+   "memory": 2.211676675774417,
+   "narma": 0.7701169505549739,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 23,
+   "memory": 2.122217160215699,
+   "narma": 0.7702086891619762,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 24,
+   "memory": 2.207031743119143,
+   "narma": 0.7667653867196833,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 24,
+   "memory": 1.9534171268315434,
+   "narma": 0.7769770138847478,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 25,
+   "memory": 2.4577538330687267,
+   "narma": 0.7612542668832362,
+   "activeMean": 0.01
+  },
+  {
+   "kind": "random",
+   "seed": 25,
+   "memory": 1.9613522272613138,
+   "narma": 0.7776158857272625,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 26,
+   "memory": 2.254432616092469,
+   "narma": 0.7687771725093907,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 26,
+   "memory": 2.00795263282063,
+   "narma": 0.769832766243223,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 27,
+   "memory": 2.1575374894767543,
+   "narma": 0.7691951259321377,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 27,
+   "memory": 1.9558365569080103,
+   "narma": 0.7739434429130918,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 28,
+   "memory": 2.2769185454210614,
+   "narma": 0.7702926230409393,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 28,
+   "memory": 1.9425962903792224,
+   "narma": 0.7757969447692368,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 29,
+   "memory": 2.3501200649709,
+   "narma": 0.7606979737958687,
+   "activeMean": 0.02
+  },
+  {
+   "kind": "random",
+   "seed": 29,
+   "memory": 2.0210946873164297,
+   "narma": 0.7751008434956688,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 30,
+   "memory": 2.2002340952765143,
+   "narma": 0.7685895167422464,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 30,
+   "memory": 1.9884298462551022,
+   "narma": 0.7741336753361289,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 31,
+   "memory": 2.1044153307683446,
+   "narma": 0.7743141450049706,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 31,
+   "memory": 1.9938663104145609,
+   "narma": 0.776002074711868,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 32,
+   "memory": 2.404027601359748,
+   "narma": 0.7562902339738723,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 32,
+   "memory": 2.0625334000684674,
+   "narma": 0.772302233305393,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 33,
+   "memory": 2.2632928126196443,
+   "narma": 0.7687242389403561,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 33,
+   "memory": 2.0903588883714423,
+   "narma": 0.773806163552215,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 34,
+   "memory": 2.2278560220095103,
+   "narma": 0.7691664935161766,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 34,
+   "memory": 1.9456700669376994,
+   "narma": 0.7762865466477209,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 35,
+   "memory": 2.3005215616576185,
+   "narma": 0.7645340374994268,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 35,
+   "memory": 2.0362739121446936,
+   "narma": 0.7737587358643534,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 36,
+   "memory": 2.345859655765443,
+   "narma": 0.7597575864924876,
+   "activeMean": 0.016
+  },
+  {
+   "kind": "random",
+   "seed": 36,
+   "memory": 1.972848478181964,
+   "narma": 0.7745563075374651,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 37,
+   "memory": 2.339323834877689,
+   "narma": 0.7612676508858378,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 37,
+   "memory": 1.940854209927516,
+   "narma": 0.7787687930751496,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 38,
+   "memory": 2.258140290373951,
+   "narma": 0.769043231977735,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 38,
+   "memory": 2.042217540932689,
+   "narma": 0.7760568047892598,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 39,
+   "memory": 2.225542396008061,
+   "narma": 0.7687477227634548,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 39,
+   "memory": 2.044589699934722,
+   "narma": 0.7742437926020883,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 40,
+   "memory": 2.2759557270335273,
+   "narma": 0.7675794894560546,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 40,
+   "memory": 1.9689060002390535,
+   "narma": 0.7769822972907336,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 41,
+   "memory": 2.1879005331265593,
+   "narma": 0.7686078977990524,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 41,
+   "memory": 1.9999247123340063,
+   "narma": 0.7734563398243041,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 42,
+   "memory": 2.356540238225825,
+   "narma": 0.765706609774919,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 42,
+   "memory": 1.939110032350193,
+   "narma": 0.7751974750609226,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 43,
+   "memory": 2.258903044534241,
+   "narma": 0.7681125697274838,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 43,
+   "memory": 2.0020274571155134,
+   "narma": 0.7742491837870077,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 44,
+   "memory": 2.3024209951286765,
+   "narma": 0.7653296427292253,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 44,
+   "memory": 1.994200114216832,
+   "narma": 0.7751860411589672,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 45,
+   "memory": 2.1347335206192284,
+   "narma": 0.7736292990412764,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 45,
+   "memory": 1.9594543671206426,
+   "narma": 0.777530065944021,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 46,
+   "memory": 2.299779569882842,
+   "narma": 0.7674288170671554,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 46,
+   "memory": 2.039411334613522,
+   "narma": 0.7744082086032663,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 47,
+   "memory": 2.16717292435086,
+   "narma": 0.770478257596652,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 47,
+   "memory": 2.0643217803331164,
+   "narma": 0.7716452768334284,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 48,
+   "memory": 2.2968875822915655,
+   "narma": 0.7668814601032624,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 48,
+   "memory": 2.03582714814007,
+   "narma": 0.7747892569405816,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 49,
+   "memory": 2.14501835117801,
+   "narma": 0.771304417973963,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 49,
+   "memory": 2.0550463545706648,
+   "narma": 0.7737861727449292,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 50,
+   "memory": 2.2275402636868273,
+   "narma": 0.7716471201638683,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 50,
+   "memory": 1.9346060623670347,
+   "narma": 0.775104626230763,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 51,
+   "memory": 2.0902057785282797,
+   "narma": 0.7738736569096188,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 51,
+   "memory": 2.0222166844394485,
+   "narma": 0.7758382662577058,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 52,
+   "memory": 2.3616791776706614,
+   "narma": 0.761966157157217,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 52,
+   "memory": 2.1090931753386983,
+   "narma": 0.7713973866606978,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 53,
+   "memory": 2.230886049505827,
+   "narma": 0.7642867508810285,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 53,
+   "memory": 2.0536655417032548,
+   "narma": 0.7722078732416968,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 54,
+   "memory": 2.2749706180059257,
+   "narma": 0.7627225006535373,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 54,
+   "memory": 1.9856839071790098,
+   "narma": 0.774250225865151,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 55,
+   "memory": 2.2764609138739873,
+   "narma": 0.7649424214494986,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 55,
+   "memory": 1.972144621496707,
+   "narma": 0.771373482363363,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 56,
+   "memory": 2.17146532281677,
+   "narma": 0.7722595753325595,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 56,
+   "memory": 1.9769441903262392,
+   "narma": 0.7760440218957539,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 57,
+   "memory": 2.231458982070453,
+   "narma": 0.7692953878398451,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 57,
+   "memory": 2.1073647120478616,
+   "narma": 0.7710855843808236,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 58,
+   "memory": 2.2872658240280552,
+   "narma": 0.7706371475197148,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 58,
+   "memory": 1.9345274325807091,
+   "narma": 0.7746132239744016,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 59,
+   "memory": 2.251687319762268,
+   "narma": 0.7699617744093233,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 59,
+   "memory": 1.9672091036396675,
+   "narma": 0.7760592938152648,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 60,
+   "memory": 2.3414512595087142,
+   "narma": 0.7634327946597449,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 60,
+   "memory": 2.0262980181305097,
+   "narma": 0.7728573034467935,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 61,
+   "memory": 2.318931088170088,
+   "narma": 0.7683989045320982,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 61,
+   "memory": 1.950822110514162,
+   "narma": 0.7763291955399311,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 62,
+   "memory": 2.252097852740814,
+   "narma": 0.7667131289483387,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 62,
+   "memory": 2.044680166072844,
+   "narma": 0.7744988031989001,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 63,
+   "memory": 2.231180501386852,
+   "narma": 0.7678141363727886,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 63,
+   "memory": 2.020219778091732,
+   "narma": 0.776421274203624,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 64,
+   "memory": 2.3172434729935065,
+   "narma": 0.7645419973263515,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 64,
+   "memory": 2.0434700710159253,
+   "narma": 0.7761245222631783,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 65,
+   "memory": 2.2839885468313788,
+   "narma": 0.7683484114246252,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 65,
+   "memory": 2.038706045443252,
+   "narma": 0.7722153084514909,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 66,
+   "memory": 2.385989129974944,
+   "narma": 0.7689417036615752,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 66,
+   "memory": 2.0374881842125037,
+   "narma": 0.7727366557625421,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 67,
+   "memory": 2.238044118827253,
+   "narma": 0.7717217505711934,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 67,
+   "memory": 2.006161145640401,
+   "narma": 0.7762300985082553,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 68,
+   "memory": 2.161844989086794,
+   "narma": 0.7717232019389694,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 68,
+   "memory": 2.056250123653057,
+   "narma": 0.7743570410514631,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 69,
+   "memory": 2.1442262218387227,
+   "narma": 0.7705622854682945,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 69,
+   "memory": 2.6395633260466833,
+   "narma": 0.7439377389498734,
+   "activeMean": 3
+  },
+  {
+   "kind": "rewired",
+   "seed": 70,
+   "memory": 2.2185500029115293,
+   "narma": 0.7699646805608278,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 70,
+   "memory": 1.9583766509216534,
+   "narma": 0.775311960057003,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 71,
+   "memory": 2.2764133939247784,
+   "narma": 0.7673857034277384,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 71,
+   "memory": 2.024534466580017,
+   "narma": 0.7734466050827858,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 72,
+   "memory": 2.1206295972178113,
+   "narma": 0.7714988399161538,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 72,
+   "memory": 2.1039038493405218,
+   "narma": 0.7717909564924917,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 73,
+   "memory": 2.2883221340015463,
+   "narma": 0.7593472978753788,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 73,
+   "memory": 2.008153647331355,
+   "narma": 0.7743214167623689,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 74,
+   "memory": 2.2792068960849203,
+   "narma": 0.7668259354016476,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 74,
+   "memory": 1.955099694836341,
+   "narma": 0.77590860829491,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 75,
+   "memory": 2.2832953219955887,
+   "narma": 0.7657195820763967,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 75,
+   "memory": 1.9331016313377465,
+   "narma": 0.7783088147593646,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 76,
+   "memory": 2.271592045723652,
+   "narma": 0.7656979986944266,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 76,
+   "memory": 2.0159001311723284,
+   "narma": 0.7699623703332227,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 77,
+   "memory": 2.3217997304869367,
+   "narma": 0.765233709525942,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 77,
+   "memory": 1.9850323059424375,
+   "narma": 0.7733074121815325,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 78,
+   "memory": 2.308083809547594,
+   "narma": 0.7637918052153362,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 78,
+   "memory": 2.0137847760107066,
+   "narma": 0.7739061322419026,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 79,
+   "memory": 2.247596572442446,
+   "narma": 0.7628804197661342,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 79,
+   "memory": 1.9869605370122527,
+   "narma": 0.7712605372313281,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 80,
+   "memory": 2.1711731026740972,
+   "narma": 0.7687496108346455,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 80,
+   "memory": 2.038666675301845,
+   "narma": 0.7720837000810599,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 81,
+   "memory": 2.3266314042020495,
+   "narma": 0.7660165782103759,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 81,
+   "memory": 2.047089434752937,
+   "narma": 0.7748735913543926,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 82,
+   "memory": 2.28889239065589,
+   "narma": 0.7651004773719172,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 82,
+   "memory": 2.06629822784832,
+   "narma": 0.7736019624514381,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 83,
+   "memory": 2.2644154657956372,
+   "narma": 0.7688767364463488,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 83,
+   "memory": 1.9505239362348425,
+   "narma": 0.7754148111934986,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 84,
+   "memory": 2.348444453440187,
+   "narma": 0.7614198976808512,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 84,
+   "memory": 2.0492892173849344,
+   "narma": 0.7777031136798038,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 85,
+   "memory": 2.274058517975783,
+   "narma": 0.7713379372959296,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 85,
+   "memory": 2.033800975986432,
+   "narma": 0.7711944536786003,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 86,
+   "memory": 2.2515434711069426,
+   "narma": 0.7671739728607416,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 86,
+   "memory": 2.0695635171231777,
+   "narma": 0.7730621561940466,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 87,
+   "memory": 2.3306070639302234,
+   "narma": 0.7606448280870096,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 87,
+   "memory": 2.107097340320168,
+   "narma": 0.7735184941694263,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 88,
+   "memory": 2.1916332928533855,
+   "narma": 0.7706619909037206,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 88,
+   "memory": 2.0054395392150295,
+   "narma": 0.7738667946917306,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 89,
+   "memory": 2.277906198678437,
+   "narma": 0.7715899764837665,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 89,
+   "memory": 2.0010165260258828,
+   "narma": 0.7762175544723576,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 90,
+   "memory": 2.1632037224576153,
+   "narma": 0.770823696528945,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 90,
+   "memory": 2.041798085236674,
+   "narma": 0.7733112335758473,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 91,
+   "memory": 2.2030189634013686,
+   "narma": 0.7670418717392908,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 91,
+   "memory": 2.0694634612446263,
+   "narma": 0.7725761375159217,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 92,
+   "memory": 2.2689178325244326,
+   "narma": 0.7668433008396179,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 92,
+   "memory": 1.9587401811349845,
+   "narma": 0.7762848471779008,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 93,
+   "memory": 2.256760408468964,
+   "narma": 0.767530108600974,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 93,
+   "memory": 1.982004144658517,
+   "narma": 0.7729695540255391,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 94,
+   "memory": 2.229123428780587,
+   "narma": 0.7704089346120051,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 94,
+   "memory": 2.133634864548952,
+   "narma": 0.7747477325477486,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 95,
+   "memory": 2.1995569270132447,
+   "narma": 0.7685571538820725,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 95,
+   "memory": 1.9702131707580903,
+   "narma": 0.7737627236708181,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 96,
+   "memory": 2.29077808007066,
+   "narma": 0.7656836453385167,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 96,
+   "memory": 2.061130156072602,
+   "narma": 0.7735725258159303,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 97,
+   "memory": 2.1575231543965896,
+   "narma": 0.7706657940835228,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 97,
+   "memory": 1.9747214108537376,
+   "narma": 0.7749182110185018,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 98,
+   "memory": 2.2315677409086874,
+   "narma": 0.7689932121588589,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 98,
+   "memory": 1.9865204670136936,
+   "narma": 0.7737828243246818,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 99,
+   "memory": 2.1207249549110445,
+   "narma": 0.7732626979929783,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 99,
+   "memory": 1.9946279109817846,
+   "narma": 0.7745608122870504,
+   "activeMean": 0
+  },
+  {
+   "kind": "rewired",
+   "seed": 100,
+   "memory": 2.2684905126159722,
+   "narma": 0.766310446455955,
+   "activeMean": 0
+  },
+  {
+   "kind": "random",
+   "seed": 100,
+   "memory": 1.9995164370873457,
+   "narma": 0.7721890529518431,
+   "activeMean": 0
+  }
+ ]
+}

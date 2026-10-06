@@ -2,7 +2,7 @@
 //
 //   node scripts/sweep.mjs            writes docs/results/sweep.csv and prints the top rows
 //
-// For each combination of chemScale, inhib, fOffset and threshold (625 points) it measures, at seeds 1, 2, 3:
+// For each combination of chemScale, inhib, fOffset and threshold (1,470 points) it measures, at seeds 1, 2, 3:
 //   score     reflex trials with the expected sign, out of 12 (4 reflexes x 3 seeds)
 //   contrast  drive(touch-tail) minus drive(touch-head). Chalfie et al. 1985 says tail touch drives
 //             forward and head touch drives backward, so this should be positive
@@ -22,9 +22,9 @@ import { WormBrain, PARAMS } from "../src/network.mjs";
 import { scoreReflexes, gridPoints, specificity, REFLEXES } from "../src/reflex.mjs";
 
 export const GRID = {
-  chemScale: [1.2, 1.5, 1.8, 2.1, 2.4],
-  inhib: [8, 10, 12, 14, 16],
-  fOffset: [0.3, 0.4, 0.5, 0.6, 0.7],
+  chemScale: [1.2, 1.5, 1.8, 2.1, 2.4, 2.7],
+  inhib: [8, 10, 12, 14, 16, 18, 20],
+  fOffset: [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
   threshold: [0.2, 0.25, 0.3, 0.35, 0.4],
 };
 export const SEEDS = [1, 2, 3];

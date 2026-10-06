@@ -44,6 +44,8 @@ The stimuli in `src/network.mjs` map to the literature as follows. [K for the li
 
 Drive is forward command activation minus backward command activation, read after 1.5 s of stimulation following 1 s of warm up. [C]
 
+> **Update, 2026-10-05.** The table and the paragraph below describe the first version of the model and are kept as a record. The audit found that the backward "passes" came mostly from a general backward lean, fixed a rest state bug, added RIB to the GABA list and reran the sweep. Current numbers are in `docs/RESULTS.md`.
+
 Important honesty point: the touch head check is the one the parameter sweep reached with the smallest margin. The sweep maximum was 9 out of 12 sign checks (four stimuli times three seeds), which is three of four stimuli right. [C] No setting in the sweep got all four. That is a result about how little a bare wiring diagram plus a generic rate model can reproduce, and it should stay on the site and in the README.
 
 One concrete suspect for the head touch miss: AVM has outgoing connections to both forward and backward command neurons in the wiring, and the model has no mechanism to select between them. Claude Code should look at the AVM edges in `data/connectome.json` before changing any parameters. [K for the AVM literature; the edge listing is a task]

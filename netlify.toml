@@ -1,0 +1,13 @@
+# Netlify builds the page from the repo. The model and data are inlined into site/index.html.
+[build]
+  command = "node scripts/build_site.mjs"
+  publish = "site"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

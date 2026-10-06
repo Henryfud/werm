@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 260" width="640" height="260" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#a09db4">
+<rect width="100%" height="100%" fill="#03050f"/>
+<text x="48" y="20" fill="#ece8e1" font-size="13">Tail touch drive, fixed parameters</text>
+<line x1="48" y1="216" x2="624" y2="216" stroke="#a09db4" stroke-width="0.5"/>
+<rect x="96.0" y="59.1" width="23.0" height="156.9" fill="#8a22b8" fill-opacity="0.75"/><rect x="120.0" y="115.7" width="23.0" height="100.3" fill="#8a22b8" fill-opacity="0.75"/><rect x="72.0" y="208.3" width="23.0" height="7.7" fill="#3333ea" fill-opacity="0.75"/><rect x="96.0" y="36.0" width="23.0" height="180.0" fill="#3333ea" fill-opacity="0.75"/><rect x="120.0" y="149.1" width="23.0" height="66.9" fill="#3333ea" fill-opacity="0.75"/><rect x="144.0" y="213.4" width="23.0" height="2.6" fill="#3333ea" fill-opacity="0.75"/>
+<line x1="597.8" y1="32" x2="597.8" y2="216" stroke="#c9ff2e" stroke-width="2"/>
+<text x="74.2" y="236" text-anchor="middle">-0.043</text><text x="336.0" y="236" text-anchor="middle">0.205</text><text x="597.8" y="236" text-anchor="middle">0.454</text><text x="624" y="20" text-anchor="end">tail</text>
+<rect x="48" y="246" width="10" height="10" fill="#8a22b8"/><text x="62" y="255">degree preserving</text><rect x="218" y="246" width="10" height="10" fill="#3333ea"/><text x="232" y="255">random (same density)</text><rect x="388" y="246" width="10" height="10" fill="#c9ff2e"/><text x="402" y="255">real wiring</text>
+</svg>

@@ -7,14 +7,18 @@
 // What this is not: a Hodgkin-Huxley model or a faithful emulation. Real synapse signs are
 // mostly unknown from wiring alone, so signs here are an approximation (see SIGNS below).
 
-// Neurons known to release GABA in the hermaphrodite. Their chemical output is treated as inhibitory.
-// Everything else is treated as excitatory. This is a simplification, and the docs say so.
+// The "conventional" GABA neurons of the adult hermaphrodite, the ones that make GABA and release it at
+// synapses (Gendrel, Atlas and Hobert 2016, eLife 5:e17686, Table 1). Their chemical output is treated as
+// inhibitory and everything else as excitatory. Cells that only take up GABA, or hold it by unknown means
+// (ALA, AVF, AVA, AVB, AVJ, SMD), are left excitatory. A simplification. See docs/NEUROTRANSMITTERS.md.
 export const GABA = new Set([
-  "RMED", "RMEV", "RMEL", "RMER", "AVL", "DVB", "RIS",
+  "RMED", "RMEV", "RMEL", "RMER", "AVL", "DVB", "RIS", "RIBL", "RIBR",
   ...Array.from({ length: 6 }, (_, i) => `DD${i + 1}`),
   ...Array.from({ length: 13 }, (_, i) => `VD${i + 1}`),
 ]);
 
+// Chosen by scripts/sweep.mjs with a rule fixed before the results were seen: stay quiet at rest for 30 s,
+// pass the most reflex sign checks, then take the largest head versus tail contrast. Table: docs/results/sweep.csv.
 export const PARAMS = {
   tau: 0.4,           // base time constant, seconds
   dt: 0.005,          // integration step, seconds
@@ -22,10 +26,10 @@ export const PARAMS = {
   threshold: 0.3,     // where the activation curve is half open
   amp: 2.0,           // how high a fully driven neuron can climb
   fSlope: 4.0,        // how sharply input opens the liquid gate
-  fOffset: 0.5,       // how much input it takes to open the gate halfway
-  chemScale: 1.8,     // overall chemical synapse strength
+  fOffset: 0.9,       // how much input it takes to open the gate halfway
+  chemScale: 2.4,     // overall chemical synapse strength
   normPow: 0.75,      // how hard each neuron divides by how much it listens to (1 = pure average)
-  inhib: 12.0,         // global inhibition pulled from the average activity of the whole net
+  inhib: 20.0,         // global inhibition pulled from the average activity of the whole net
   gapScale: 0.55,     // overall gap junction strength
   noise: 0.012,       // small seeded noise so the worm never sits perfectly still
   baseDrive: 0.0,     // constant background input

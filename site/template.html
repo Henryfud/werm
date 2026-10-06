@@ -39,6 +39,9 @@ a { color: inherit; }
 .wrap { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: 20px; }
 .mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; }
 
+/* top bar */
+.cabar { background: var(--lime); color: var(--ink); text-align: center; padding: 7px 16px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; position: relative; z-index: 21; }
+
 /* nav */
 .nav {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
@@ -213,6 +216,10 @@ section.about { padding-block: 40px 0; }
 .eq { font-family: var(--mono); font-size: 13px; background: #05071a; border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; margin: 0 0 1.4em; overflow-x: auto; white-space: pre; line-height: 1.8; }
 .pull { border-left: 3px solid var(--lime); padding: 4px 0 4px 18px; font-size: 22px; line-height: 1.35; letter-spacing: -0.015em; margin: 1.6em 0; }
 .sources { font-size: 14px; }
+.results { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border: 1px solid var(--rule); border-radius: 8px; margin: 0 0 1.4em; overflow: hidden; }
+.results div { padding: 16px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 0 -1px -1px 0; }
+.results .n { font-size: 40px; letter-spacing: -0.04em; font-weight: 500; line-height: 1; color: var(--lime); font-variant-numeric: tabular-nums; }
+.results .l { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 8px; line-height: 1.6; }
 .sources li { word-break: break-word; }
 @media (max-width: 900px) { .notes .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px; } .toc { display: none; } }
 
@@ -228,6 +235,7 @@ footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-
 <canvas id="fieldLabels" aria-hidden="true"></canvas>
 
 <div class="page">
+  <div class="cabar mono" role="note">CA: coming soon</div>
   <header class="nav">
     <div class="wrap">
       <a class="logo" href="#top"><img src="__LOGO__" alt="" width="30" height="30">WERM</a>
@@ -283,7 +291,7 @@ footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-
   <section class="band solid" id="brain">
     <div class="wrap">
       <h2>The brain, on a globe</h2>
-      <p class="sub">Every dot is one of the 302 neurons in the adult hermaphrodite. Sensory neurons sit near the top, motor neurons near the bottom, interneurons in the band between. Arcs are real synapses from the Cook et al. 2019 wiring diagram. Drag to spin it. Click a dot to fire that neuron.</p>
+      <p class="sub">Every dot is one of the 302 neurons in the adult hermaphrodite. Sensory neurons sit near the top, motor neurons near the bottom, interneurons in the band between. Arcs are real chemical connections from the Cook et al. 2019 wiring diagram. Drag to spin it. Click a dot to fire that neuron.</p>
       <div class="twocol">
         <div class="frame">
           <div class="bar"><span>CONNECTOME / HERMAPHRODITE</span><span id="globeNote">drag to rotate</span></div>
@@ -309,7 +317,7 @@ footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-
             <div class="dmeter"><div class="row"><span>real wiring</span><b id="cR">0.00</b></div><div class="dtrack"><i></i><div class="dfill" id="dR"></div></div></div>
             <div class="dmeter"><div class="row"><span>shuffled wiring</span><b id="cS">0.00</b></div><div class="dtrack"><i></i><div class="dfill s" id="dS"></div></div></div>
           </div>
-          <p class="mono" style="margin-top:18px;opacity:.75;line-height:1.7">Touching the tail should push the forward command up. Touching the head and bumping the nose should push the backward command up. The model gets three of those four right. The notes below say which one it misses and why.</p>
+          <p class="mono" style="margin-top:18px;opacity:.75;line-height:1.7">Touching the tail should push the forward command up. Touching the head or bumping the nose should push the backward command up. Here, tail touch and nose touch do that clearly. Head touch leans the right way, but only just. The notes say why.</p>
         </div>
       </div>
 
@@ -342,7 +350,7 @@ node src/cli.mjs chat --model llama3.2</div>
   <section class="band solid" id="body">
     <div class="wrap">
       <h2>The body it came from</h2>
-      <p class="sub">One millimetre long, transparent, and about three days from egg to adult at room temperature. Scroll and the outline draws itself. The worm below uses the same brain: its wave speed and direction come from the motor neuron readout, so poking the head makes it back up.</p>
+      <p class="sub">About a millimetre long, transparent, and about three days from egg to adult at 25 C. Scroll and the outline draws itself. The worm below uses the same brain: its wave speed and direction come from the motor neuron readout, so poking the head makes it back up.</p>
       <div class="frame anat" id="anat">
         <div class="bar"><span>C. ELEGANS / ADULT HERMAPHRODITE / SIDE VIEW (SCHEMATIC)</span><span>not to scale</span></div>
         <svg viewBox="0 0 1000 280" role="img" aria-label="Schematic side view of the worm showing pharynx, nerve ring, intestine, gonad, vulva and tail">
@@ -364,9 +372,9 @@ node src/cli.mjs chat --model llama3.2</div>
       </div>
       <div class="glossary">
         <div><h4>pharynx</h4><p>A muscular pump that grinds bacteria. It has its own small nervous system of 20 neurons.</p></div>
-        <div><h4>nerve ring</h4><p>The densest knot of wiring in the animal, circling the pharynx. Most of the 302 neurons send fibres through it.</p></div>
-        <div><h4>intestine</h4><p>A tube of 20 cells that digests food and makes yolk for the eggs.</p></div>
-        <div><h4>gonad</h4><p>Two U shaped arms. The adult hermaphrodite makes sperm first, then eggs, and can fertilise itself.</p></div>
+        <div><h4>nerve ring</h4><p>A ring of nerve fibres around the pharynx, and the densest knot of wiring in the animal. It works as the worm's brain.</p></div>
+        <div><h4>intestine</h4><p>A tube of just 20 cells that digests the bacteria the worm eats.</p></div>
+        <div><h4>gonad</h4><p>Two U shaped arms that make sperm and eggs. A hermaphrodite can fertilise its own eggs.</p></div>
         <div><h4>vulva</h4><p>The opening where eggs leave. Two serotonin neurons, HSNL and HSNR, drive egg laying, and both are in the data on this page.</p></div>
         <div><h4>body wall muscle</h4><p>Four strips of muscle run along the body. Motor neurons fire them in waves, and the worm crawls in S shapes.</p></div>
       </div>
@@ -422,6 +430,7 @@ node scripts/gene_windows.mjs data/genome/annotation.gff.gz</div>
         <a href="#n-liquid">Liquid networks</a>
         <a href="#n-openworm">OpenWorm</a>
         <a href="#n-model">Our model</a>
+        <a href="#n-matter">Does the wiring matter?</a>
         <a href="#n-limits">What it cannot do</a>
         <a href="#n-run">Run it</a>
         <a href="#n-sources">Sources</a>
@@ -429,26 +438,27 @@ node scripts/gene_windows.mjs data/genome/annotation.gff.gz</div>
       <article class="prose">
         <h2 id="n-why">Why a worm</h2>
         <p>Caenorhabditis elegans is a roundworm about a millimetre long. It lives in soil and rotting fruit, eats bacteria, and has no business being famous. It became famous because of a decision made in the 1960s. Sydney Brenner and his colleagues picked it as a model animal, and nearly everything useful about it follows from that choice.</p>
-        <p>It is transparent, so you can watch cells divide inside a living animal under an ordinary microscope. It grows on a plate of agar. It goes from egg to adult in about three days and lives a few weeks. Most individuals are self fertilising hermaphrodites, so a single worm starts a whole population, and a rare male lets you cross strains when you need to. An adult hermaphrodite has 959 somatic cells, and the lineage of every one of them has been traced from the fertilised egg.</p>
+        <p>It is transparent, so you can watch cells divide inside a living animal under an ordinary microscope. It grows on a plate of agar. It goes from egg to adult in about three days and lives for several weeks. Most individuals are self fertilising hermaphrodites, so a single worm starts a whole population, and a rare male lets you cross strains when you need to. An adult hermaphrodite has 959 somatic cells, and the lineage of every one of them has been traced from the fertilised egg.</p>
         <p class="pull">An animal small enough to hold in your head, with a nervous system small enough to draw.</p>
         <p>That last point is why this project exists. A human brain has tens of billions of neurons. The worm has 302. Someone could sit down with an electron microscope and map every one, and in the 1980s someone did.</p>
 
         <h2 id="n-life">Life of a worm</h2>
-        <p>A worm hatches as a larva and moves through four larval stages, called L1 to L4, before becoming an adult. At room temperature the whole trip takes roughly three days. If food runs out or the plate gets crowded, a young larva can switch into a tough, non eating form called a dauer. Dauer larvae can wait out hard times for weeks and then resume normal life when conditions improve.</p>
+        <p>A worm hatches as a larva and moves through four larval stages, called L1 to L4, before becoming an adult. At 25 C the whole trip takes about three days. If food runs out or the plate gets crowded, a young larva can switch into a tough, non eating form called a dauer. Dauer larvae can wait out hard times for months and then resume normal life when conditions improve.</p>
         <p>The nervous system changes through that journey. About a quarter of the adult neurons are born after hatching. A larva starts life with around 1,300 synapses and an adult ends up with roughly 8,000. A 2021 study by Daniel Witvliet and colleagues reconstructed eight worms from newborn to adult and found that most of the added synapses strengthen connections that already existed at birth. Only about a quarter linked a neuron to a new partner.</p>
         <p>Worms also differ from each other. The same 302 neurons appear in the same places in every hermaphrodite, but each animal has its own particular synapses. That matters for this project, because the wiring diagram on this page comes from specific animals and is a sample of what a worm can be, not a single fixed blueprint.</p>
 
         <h2 id="n-genome">The genome</h2>
         <p>The reference genome is about 100 million base pairs long, split across five autosomes and the X chromosome, plus a small circular mitochondrial genome of 13,794 bases. Chromosome V is the longest at roughly 20.9 million bases. Chromosome III is the shortest at roughly 13.8 million. The bars in the genome section above use the exact lengths from the NCBI RefSeq record.</p>
-        <p>It is rich in A and T. Close to 65 percent of the letters are one of those two. The consortium that sequenced it published the result in Science in 1998, and the sequence has been revised and gap filled since then until it ran from telomere to telomere on every chromosome.</p>
-        <p>Counting genes is harder than counting bases because the answer depends on what you call a gene. WormBase, the community database, reported about 19,985 protein coding genes in its 2022 update, out of 49,187 genes in total once non coding RNA genes and others are included. Earlier annotation rounds put the protein coding count a little lower, near 19,700. The number keeps moving by small amounts as curators find new exons and merge or split predictions.</p>
+        <p>It is rich in A and T. Measured from the reference sequence, 35.4 percent of the letters are G or C, so close to 65 percent are A or T. The GC map above shows that this is not even: some stretches run near 30 percent GC and others above 40. The consortium that sequenced the genome published it in Science in 1998, the first complete genome of a multicellular organism. It has been revised and gap filled since, until it ran from telomere to telomere on every chromosome.</p>
+        <p>Counting genes is harder than counting bases because the answer depends on what you call a gene. The annotation behind the gene map on this page (WormBase release WS298, as distributed by NCBI) lists 19,971 protein coding genes on the six chromosomes. WormBase's 2022 paper reported 19,985, out of 49,187 genes of all kinds once non coding RNA genes and others are included. Annotation rounds from 2005 put it near 19,700. The number moves by small amounts as curators find new exons and merge or split predictions.</p>
         <p>A large share of those genes have recognisable counterparts in humans, which is the main reason a worm is useful for studying disease. Researchers have compiled lists of worm genes with human orthologs, such as the OrthoList resource, so that a worm experiment can be matched to a human gene of interest.</p>
         <p>Nothing on this page claims the genome runs the simulation. The genome is the instruction set that builds the worm. The connectome is what the finished nervous system looks like. They are different layers, and the project treats them that way: the genome section is a viewer and a data pipeline, and the brain is built from the wiring.</p>
 
         <h2 id="n-wiring">The wiring diagram</h2>
-        <p>The first complete map of any nervous system was published in 1986 by John White, Eileen Southgate, Nichol Thomson and Sydney Brenner. They sliced a worm into thousands of ultrathin sections, imaged each one by electron microscope, and followed every fibre by hand. The result listed 302 neurons and about 7,000 synapses and gap junctions. It is still the reference point for the field.</p>
+        <p>The first complete map of any nervous system was published in 1986 by John White, Eileen Southgate, Nichol Thomson and Sydney Brenner. They cut worms into ultrathin serial sections, imaged each one by electron microscope, and followed the fibres from picture to picture by hand. Their count was 302 neurons, with about 5,000 chemical synapses, 2,000 connections onto muscle and 600 gap junctions. It is still the reference point for the field.</p>
         <p>Later work refined it. Varshney and colleagues rebuilt the hermaphrodite somatic network in 2011. Steven Cook and colleagues published whole animal connectomes for both sexes in 2019, covering muscles and other tissues as well as neurons. The dataset behind this page is the Cook 2019 hermaphrodite network, as packaged by the OpenWorm Connectome Toolbox.</p>
         <p>After cleaning, it contains 302 neurons, 3,709 directed chemical connections and 1,105 gap junction pairs between neurons. The counts on the page above are computed from the data file when it loads. A chemical synapse sends a signal one way using a neurotransmitter. A gap junction is a direct electrical link that lets current pass in both directions.</p>
+        <p>Each connection also has a weight. In this dataset the weight is the number of electron microscope sections in which the two cells were seen joined, so it grows with both the number and the size of the synapses. That is why the weights add up to far more than the number of synapses, and why this page never calls them synapse counts.</p>
         <p>A wiring diagram is a map of what is connected to what, and how strongly. It does not tell you which synapses excite their targets and which inhibit them. It does not include the slower chemical signalling that runs through the whole animal by neuropeptides and monoamines. People are working on those layers, and the OpenWorm toolbox lists datasets for them. We do not use them here.</p>
 
         <h2 id="n-nobel">Prizes</h2>
@@ -460,24 +470,29 @@ node scripts/gene_windows.mjs data/genome/annotation.gff.gz</div>
         <p>The model on this page borrows the same shape of idea at a very small scale. Each neuron is a leaky unit, and the incoming signal opens a gate that speeds up how fast the unit moves toward its target. That is the liquid time constant in one line.</p>
 
         <h2 id="n-openworm">OpenWorm</h2>
-        <p>OpenWorm is an open science project that has spent about a decade trying to simulate the whole animal. It is organised as a set of parts. c302 builds neuron models of the whole nervous system in NeuroML at several levels of detail, from simple integrate and fire cells up to Hodgkin Huxley style conductance models. Sibernetic simulates the physical body and the fluid around it. Geppetto is a browser based visualisation and simulation engine. The ConnectomeToolbox collects published wiring datasets in one Python package, and that is where the wiring data used here came from.</p>
+        <p>OpenWorm is an open science project that has been working since 2011 to simulate the whole animal. It is organised as a set of parts. c302 builds neuron models of the whole nervous system in NeuroML at several levels of detail, from simple integrate and fire cells up to Hodgkin Huxley style conductance models. Sibernetic simulates the physical body and the fluid around it. Geppetto is a browser based visualisation and simulation engine. The ConnectomeToolbox collects published wiring datasets in one Python package, and that is where the wiring data used here came from.</p>
         <p>WERM is not a part of that effort and does not compete with it. If you want a faithful biophysical simulation, use c302. If you want something small that runs in a browser tab and can be taken apart in an afternoon, that is the gap this project fills.</p>
 
         <h2 id="n-model">Our model</h2>
         <p>Each of the 302 neurons has one number, its activation level x. The update rule for every neuron is:</p>
         <div class="eq">f  = sigmoid( slope * (drive - offset) )
 dx/dt = -(1/tau + f) * x + f * amp</div>
-        <p>Here drive is the sum of chemical input, gap junction input and any outside stimulus, minus a global inhibition term. Chemical input from neuron j into neuron i is the log of the synapse count times the presynaptic activation, divided by how much neuron i listens in total. Neurons that release GABA, such as DD, VD, RME, AVL, DVB and RIS, count as inhibitory. Everything else counts as excitatory.</p>
-        <p>The gate f is the liquid part. More drive means a larger f, which makes the neuron both decay faster and aim higher. A neuron with no input settles near zero.</p>
-        <p>The first version of this network was either dead or saturated, which is common for a wiring diagram that is mostly excitatory. Stable behaviour needed a baseline subtraction on the activation curve and a global inhibition term. I then tuned a handful of parameters by hand so that touch inputs produce the reflexes the literature describes. That is the honest summary: it is a hand tuned model, not a fit to recordings.</p>
-        <p>With the settings in the repo, tail touch drives the forward command, nose touch and a noxious stimulus drive the backward command, and head touch does not reliably do so. I left that last test in the suite and marked it as a known miss. A model that always agrees with you is not showing you anything.</p>
+        <p>Here drive is the sum of chemical input, gap junction input and any outside stimulus, minus a global inhibition term. Chemical input from neuron j into neuron i is the log of the connection weight times the presynaptic activation, divided by how much neuron i listens in total. The 28 neurons that make and release GABA (DD, VD, RME, RIB, AVL, DVB and RIS, from Gendrel and colleagues, 2016) count as inhibitory. Everything else counts as excitatory.</p>
+        <p>The gate f is the liquid part. More drive means a larger f, which makes the neuron both decay faster and aim higher. A neuron with no input settles at a resting level worked out from the equation, and its activation is measured from there, so a quiet network stays quiet.</p>
+        <p>A wiring diagram that is mostly excitatory tends to be either dead or saturated, so the model needs a global inhibition term to stay in between. Four parameters were then picked by a sweep over 1,470 settings, using a rule fixed in advance: the worm must stay quiet at rest for 30 seconds, pass as many reflex checks as possible, and then separate head touch from tail touch as clearly as possible. It is a tuned model, not a fit to recordings.</p>
+        <p>The result: tail touch drives the forward command strongly, nose touch drives the backward command, head touch leans backward only slightly, and the noxious stimulus is no better than poking random sensory cells. Head touch is weak for a reason you can read off the wiring. AVM, a head touch cell, sends most of its chemical output to the forward command cells and only a little to the backward ones. In this model every non GABA synapse excites, so a head touch pushes both ways at once. In the real animal, some of those synapses are probably inhibitory, through receptors this model does not have.</p>
+
+        <h2 id="n-matter">Does the wiring matter?</h2>
+        <p>A fair question about any model like this: would any network of the same size do the same thing? To test it, the reflex checks were run on 100 shuffled copies of the wiring, where every neuron keeps exactly as many connections in and out but the partners are swapped, and on 100 random networks with the same number of connections. Each fake network got its own parameter sweep, so none was stuck with settings tuned for the real one.</p>
+        <div class="results" id="nullResults"></div>
+        <p>So yes, for this one thing. The real wiring routes head touch and tail touch apart much better than shuffled wiring does, and keeping each neuron's number of connections is not enough to copy it. It is a narrow result. On a general memory task the real wiring did slightly worse than its shuffles, so this is not a claim that the worm's wiring is better at everything. The full numbers, plots and method are in <a href="__GITHUB_URL__/blob/main/docs/RESULTS.md">docs/RESULTS.md</a>, and you can watch the real and shuffled brains side by side with the compare button in the brain section.</p>
 
         <h2 id="n-limits">What it cannot do</h2>
         <ul>
           <li>It cannot tell you what a real worm will do. There are no muscles and no body physics in the brain model, and the swimming worm on this page is a kinematic drawing driven by two numbers from the network.</li>
-          <li>Synapse signs are approximated. Only a handful of inhibitory cell types are marked, and many neurons release different transmitters onto different targets.</li>
+          <li>Synapse signs are approximated. Only the 28 GABA neurons are inhibitory, and many synapses that the model treats as excitatory are probably inhibitory in the animal.</li>
           <li>It has no neuropeptides or monoamines, which shape behaviour in real worms on timescales of minutes to hours.</li>
-          <li>The steering layer is a design choice. Mapping arousal to temperature is something I picked because it is easy to see, not because neuroscience says it should be so.</li>
+          <li>The steering layer is a design choice. Mapping arousal to temperature is something I picked because it is easy to see, not because neuroscience says it should be so. Its effect on a language model has not been measured yet. The test is written and in the repo.</li>
           <li>The worm does not think for the language model. It sets a few sampling numbers and a tone instruction, and the model does the rest.</li>
         </ul>
 
@@ -486,7 +501,8 @@ dx/dt = -(1/tau + f) * x + f * amp</div>
         <div class="code" id="runCode"><button class="copy" data-copy="runCode">copy</button>git clone GH_URL
 cd werm
 npm test
-node src/cli.mjs sim --stim noxious
+node src/cli.mjs sim --stim touch-tail
+npm run experiments
 bash scripts/fetch_genome.sh
 ollama pull llama3.2
 node src/cli.mjs chat --model llama3.2</div>
@@ -494,22 +510,27 @@ node src/cli.mjs chat --model llama3.2</div>
 
         <h2 id="n-sources">Sources</h2>
         <ul class="sources">
-          <li><a href="https://wiki.wormbase.org/index.php/Worm_numbers">WormBase, Worm numbers</a> (genome size and base composition)</li>
-          <li><a href="https://www.genome.jp/kegg-bin/show_organism?org=cel">KEGG, Caenorhabditis elegans reference genome</a> (chromosome lengths, RefSeq accessions, 1998 Science citation)</li>
-          <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8982018">WormBase in 2022</a> (gene counts, WBcel235 reference)</li>
-          <li><a href="https://genome.cshlp.org/cgi/content/full/15/12/1651">Genomics in C. elegans: so many genes, such a little worm</a> (telomere to telomere sequence, earlier gene counts)</li>
-          <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3102077/">OrthoList: a compendium of C. elegans genes with human orthologs</a></li>
-          <li><a href="https://openworm.org/ConnectomeToolbox/">OpenWorm Connectome Toolbox</a> (data sources and datasets)</li>
-          <li><a href="https://openworm.org/ConnectomeToolbox/Witvliet_2021/">Witvliet et al. 2021, Connectomes across development</a>, Nature 596, 257 to 261</li>
-          <li><a href="https://www.mcb.harvard.edu/department/news/zhen-samuel-and-lichtman-labs-generate-complete-synaptic-census-of-the-c-elegans-bra">Harvard MCB news on the Witvliet synaptic census</a></li>
-          <li><a href="https://www.frontiersin.org/journals/neural-circuits/articles/10.3389/fncir.2018.00094/pdf">Mulcahy et al. 2018, Frontiers in Neural Circuits</a> (history of the connectome, post embryonic neurons)</li>
-          <li>Cook et al. 2019, Whole animal connectomes of both Caenorhabditis elegans sexes, Nature 571, 63 to 71</li>
-          <li><a href="https://www.sciencedaily.com/releases/2021/01/210128091153.htm">MIT, liquid machine learning system adapts to changing conditions</a></li>
-          <li><a href="https://quantamagazine.org/researchers-discover-a-more-flexible-approach-to-machine-learning-20230207">Quanta Magazine on liquid neural networks</a></li>
-          <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4697589/">The OpenWorm Project: currently available resources and future plans</a></li>
-          <li><a href="https://github.com/openworm/c302">openworm/c302 on GitHub</a></li>
-          <li><a href="https://www.hobertlab.org/wp-content/uploads/2024/10/These-Tiny-Worms-Account-for-at-Least-4-Nobel-Prizes-The-New-York-Times.pdf">The New York Times, these tiny worms account for at least 4 Nobel prizes</a></li>
-          <li><a href="https://oge.mit.edu/?p=101148">MIT, Ambros and Ruvkun share the 2024 Nobel Prize in Physiology or Medicine</a></li>
+          <li>White JG, Southgate E, Thomson JN, Brenner S. 1986. The structure of the nervous system of the nematode <i>Caenorhabditis elegans</i>. Phil Trans R Soc Lond B 314:1 to 340. <a href="https://doi.org/10.1098/rstb.1986.0056">doi:10.1098/rstb.1986.0056</a></li>
+          <li>Cook SJ et al. 2019. Whole-animal connectomes of both <i>Caenorhabditis elegans</i> sexes. Nature 571:63 to 71. <a href="https://doi.org/10.1038/s41586-019-1352-7">doi:10.1038/s41586-019-1352-7</a> (the wiring used here)</li>
+          <li>Witvliet D et al. 2021. Connectomes across development reveal principles of brain maturation. Nature 596:257 to 261. <a href="https://doi.org/10.1038/s41586-021-03778-8">doi:10.1038/s41586-021-03778-8</a></li>
+          <li>Varshney LR et al. 2011. Structural properties of the <i>Caenorhabditis elegans</i> neuronal network. PLoS Comput Biol 7:e1001066. <a href="https://doi.org/10.1371/journal.pcbi.1001066">doi:10.1371/journal.pcbi.1001066</a></li>
+          <li>Gendrel M, Atlas EG, Hobert O. 2016. A cellular and regulatory map of the GABAergic nervous system of <i>C. elegans</i>. eLife 5:e17686. <a href="https://doi.org/10.7554/eLife.17686">doi:10.7554/eLife.17686</a> (the inhibitory neurons)</li>
+          <li>Chalfie M et al. 1985. The neural circuit for touch sensitivity in <i>Caenorhabditis elegans</i>. J Neurosci 5:956 to 964. <a href="https://doi.org/10.1523/JNEUROSCI.05-04-00956.1985">doi:10.1523/JNEUROSCI.05-04-00956.1985</a> (head and tail touch)</li>
+          <li>Kaplan JM, Horvitz HR. 1993. A dual mechanosensory and chemosensory neuron in <i>Caenorhabditis elegans</i>. PNAS 90:2227 to 2231. <a href="https://doi.org/10.1073/pnas.90.6.2227">doi:10.1073/pnas.90.6.2227</a> (nose touch)</li>
+          <li>Maslov S, Sneppen K. 2002. Specificity and stability in topology of protein networks. Science 296:910 to 913. <a href="https://doi.org/10.1126/science.1065103">doi:10.1126/science.1065103</a> (the shuffling method)</li>
+          <li>Albertson DG, Thomson JN. 1976. The pharynx of <i>Caenorhabditis elegans</i>. Phil Trans R Soc Lond B 275:299 to 325. <a href="https://doi.org/10.1098/rstb.1976.0085">doi:10.1098/rstb.1976.0085</a> (the 20 pharyngeal neurons)</li>
+          <li>The <i>C. elegans</i> Sequencing Consortium. 1998. Genome sequence of the nematode <i>C. elegans</i>: a platform for investigating biology. Science 282:2012 to 2018. <a href="https://doi.org/10.1126/science.282.5396.2012">doi:10.1126/science.282.5396.2012</a></li>
+          <li>Hillier LW et al. 2005. Genomics in <i>C. elegans</i>: so many genes, such a little worm. Genome Res 15:1651 to 1660. <a href="https://doi.org/10.1101/gr.3729105">doi:10.1101/gr.3729105</a></li>
+          <li>Davis P et al. 2022. WormBase in 2022: data, processes, and tools for analyzing <i>Caenorhabditis elegans</i>. Genetics 220:iyac003. <a href="https://doi.org/10.1093/genetics/iyac003">doi:10.1093/genetics/iyac003</a></li>
+          <li><a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000002985.6/">NCBI RefSeq assembly GCF_000002985.6 (WBcel235)</a> and its gene annotation (WormBase WS298), the source of the genome maps</li>
+          <li>Corsi AK, Wightman B, Chalfie M. 2015. A transparent window into biology: a primer on <i>Caenorhabditis elegans</i>. Genetics 200:387 to 407. <a href="https://doi.org/10.1534/genetics.115.176099">doi:10.1534/genetics.115.176099</a> (life cycle, body plan, first multicellular genome)</li>
+          <li>Hasani R, Lechner M, Amini A, Rus D, Grosu R. 2021. Liquid time-constant networks. Proc AAAI 35:7657 to 7666. <a href="https://doi.org/10.1609/aaai.v35i9.16936">doi:10.1609/aaai.v35i9.16936</a></li>
+          <li>Lechner M, Hasani RM, Grosu R. 2018. Neuronal circuit policies. <a href="https://arxiv.org/abs/1803.08554">arXiv:1803.08554</a></li>
+          <li>Szigeti B et al. 2014. OpenWorm: an open-science approach to modeling <i>Caenorhabditis elegans</i>. Front Comput Neurosci 8:137. <a href="https://doi.org/10.3389/fncom.2014.00137">doi:10.3389/fncom.2014.00137</a></li>
+          <li><a href="https://openworm.org/ConnectomeToolbox/">OpenWorm Connectome Toolbox</a> and <a href="https://github.com/openworm/c302">openworm/c302</a></li>
+          <li><a href="https://www.nobelprize.org/prizes/medicine/2024/press-release/">The Nobel Prize in Physiology or Medicine 2024</a>, and the <a href="https://www.nobelprize.org/prizes/medicine/2002/summary/">2002</a>, <a href="https://www.nobelprize.org/prizes/medicine/2006/press-release/">2006</a> and <a href="https://www.nobelprize.org/prizes/chemistry/2008/summary/">2008</a> prizes</li>
+          <li><a href="https://www.sciencedaily.com/releases/2021/01/210128091153.htm">MIT CSAIL via ScienceDaily, 2021, on liquid networks</a> and <a href="https://www.quantamagazine.org/researchers-discover-a-more-flexible-approach-to-machine-learning-20230207/">Quanta Magazine, 2023</a></li>
+          <li>Every citation in the project, with its checked status: <a href="__GITHUB_URL__/blob/main/docs/research/07-reading-list.md">docs/research/07-reading-list.md</a></li>
         </ul>
       </article>
     </div>
@@ -968,6 +989,18 @@ $("fasta").addEventListener("change", async (ev) => {
   }
   const note = document.createElement("div"); note.style.opacity = ".65"; note.textContent = "Each pixel is a 100 kb window. Lime is the most GC rich, blue the least."; out.appendChild(note);
 });
+
+/* ---------- null model results, from docs/results/null-models.json ---------- */
+if (NULL_RESULTS) {
+  const B = NULL_RESULTS.summary.B.bestContrast, n = NULL_RESULTS.graphsPerKind;
+  const beaten = (k) => Math.round((100 - B[k].realPercentile) * n / 100);
+  $("nullResults").innerHTML = [
+    [B.real.toFixed(2), "head versus tail contrast on the real wiring, at its best setting"],
+    [B.rewired.mean.toFixed(2), "the same on shuffled wiring that keeps every neuron's number of connections, average of " + n],
+    [beaten("rewired") + " of " + n, "shuffled copies that matched or beat the real wiring"],
+    [beaten("random") + " of " + n, "random networks of the same size that matched or beat it"],
+  ].map(([v, l]) => "<div><div class='n'>" + v + "</div><div class='l'>" + l + "</div></div>").join("");
+} else $("nullResults").textContent = "The experiment has not been run on this build.";
 
 /* ---------- anatomy draw on scroll ---------- */
 const anat = $("anat"), drawPaths = anat.querySelectorAll(".draw");

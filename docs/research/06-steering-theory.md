@@ -50,6 +50,8 @@ All of these can be done locally with a small model and a few hundred prompts. T
 
 ## 6.5 Honest way to describe it publicly
 
+> **Update, 2026-10-05.** The description below predates the audit. Use the wording in the README and `docs/RESULTS.md`: tail and nose touch are specific responses, head touch is weak, noxious is not specific, and the real wiring beats shuffled wiring on the head versus tail contrast. Experiment 3 and the reservoir benchmark (6.4, item 6) have been run. Experiments 1, 2 and 4 are written in `scripts/steer-eval.mjs` and have not been run.
+
 A defensible description, supported by what exists today: "A 302 neuron model built on the real *C. elegans* wiring diagram, whose state drives the sampling settings and a tone line of a local language model. The mapping from worm to model is a design choice. The reflex behaviour of the network is partly tuned and partly emergent, and three of four reflex checks pass."
 
 If experiments 1 to 4 show effects, add the measured numbers. If they do not, say that too. A plain statement of what was tested is the strongest thing a small project can offer.

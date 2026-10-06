@@ -47,7 +47,7 @@ What it does well, from reading its pages: a one line hook (SI, not AI) backed b
 
 Sorocarp's simulation is a Jones 2010 style particle model with seven local rules (hunger, settle, sense, turn, move, leave a trail, feed divide die). [S] The relevant paper is Jones, J. 2010, "Characteristics of pattern formation and evolution in approximations of Physarum transport networks", Artificial Life 16:127. [K]
 
-**Do not copy Sorocarp's code, wording or layout.** WERM takes the general idea of a biological system as the engine and a live visual as the proof, and does everything else differently: a different organism, a different model class (a recurrent rate network on a measured wiring diagram), a different visual language (pixel dither, globe, terrain), and no token tied to the project.
+**Do not copy Sorocarp's code, wording or layout.** WERM takes the general idea of a biological system as the engine and a live visual as the proof, and does everything else differently: a different organism, a different model class (a recurrent rate network on a measured wiring diagram), and a different visual language (pixel dither, globe, terrain).
 
 ## 5.4 Other "small brain" computing work worth reading
 

@@ -40,7 +40,7 @@ The research pack is in `repo/docs/research/`. Seven files, about ten thousand w
 - The visual direction is the reference image in `reference/`: navy ground, purple and magenta dither, blue, lime accent, mono and grotesque type. Imagine generative worms wiggling around the screen as you scroll, with scroll animations throughout, plus a globe with arcs like the second reference image.
 - Use real science. Say "theory" occasionally where the claim really is a theory, but do not overuse it.
 - The name is **WERM**. The acronym is Wiring-Encoded Recurrent Modulator.
-- There is **no coin and no token** in this project. It is a conceptual build.
+- There is **no coin and no token** in this project. It is a conceptual build. (Superseded on 2026-10-05: the owner decided to show "CA: coming soon" at the top of the site. See `CLAUDE.md`.)
 - The hero line explains C. elegans in a playful, simple way for ordinary readers.
 
 ---
@@ -425,7 +425,7 @@ Commit message style: short imperative subject, one blank line, a few lines of d
 
 ## 14. Things not to do
 
-- Do not add a coin, token, wallet, trading feature or anything financial. The project has none, and the user confirmed that.
+- Do not add a coin, token, wallet, trading feature or anything financial. The project has none, and the user confirmed that. (Superseded on 2026-10-05 for one line only: the site shows "CA: coming soon" at the owner's request. Wallet and trading features are still out unless the owner asks.)
 - Do not invent a genome sequence, a connectome edge, a statistic or a citation. If a number is not in the research pack with a source, find the source or leave it out.
 - Do not describe the model as a faithful emulation of the worm, as a liquid neural network in the sense of the MIT papers without the words "in the style of", or as something that makes a language model smarter.
 - Do not copy Sorocarp's code, wording, layout or structure. It was an example of the kind of project, not a template.

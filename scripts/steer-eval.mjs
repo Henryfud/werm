@@ -47,7 +47,7 @@
 // Raw replies are appended to docs/results/steer-eval/raw-<model>-<date>.jsonl, one JSON object per call,
 // each tagged with a run id. The summary JSON and a markdown table go to stdout.
 import fs from "node:fs";
-import { pathToFileURL } from "node:url";
+import { pathToFileURL, fileURLToPath } from "node:url";
 import { WormBrain, mulberry32 } from "../src/network.mjs";
 import { steer, systemPrompt, stimuliFromText, applyStimuli } from "../src/steer.mjs";
 import { chat } from "../src/ollama.mjs";
@@ -364,7 +364,7 @@ async function runExperiment1(cfg) {
   }
   process.stderr.write("\n");
   const summary = summarise(groups);
-  console.log(JSON.stringify({ experiment: cfg.mapping === "alt" ? 4 : 1, model: cfg.model, samples: cfg.samples, seed: cfg.seed, raw: raw.path.pathname, fit: plan.fit, summary }, null, 2));
+  console.log(JSON.stringify({ experiment: cfg.mapping === "alt" ? 4 : 1, model: cfg.model, samples: cfg.samples, seed: cfg.seed, raw: fileURLToPath(raw.path), fit: plan.fit, summary }, null, 2));
   console.log("\n" + markdownTable(summary));
   if (cfg.mapping === "alt") console.log("\n" + shiftTable(summary));
 }
@@ -396,7 +396,7 @@ async function runExperiment2(cfg) {
     result[arm] = { turns: plan.prompts.length, samples: cfg.samples, meanJaccard: mean(overlaps), meanCosine: cfg.embedModel ? mean(cosines) : null };
   }
   process.stderr.write("\n");
-  console.log(JSON.stringify({ experiment: 2, model: cfg.model, seed: cfg.seed, raw: raw.path.pathname, order: plan.order, result }, null, 2));
+  console.log(JSON.stringify({ experiment: 2, model: cfg.model, seed: cfg.seed, raw: fileURLToPath(raw.path), order: plan.order, result }, null, 2));
   console.log("\n| arm | turns | samples | mean Jaccard of consecutive replies | mean cosine of consecutive replies |\n|---|---|---|---|---|");
   for (const [arm, r] of Object.entries(result)) console.log(`| ${arm} | ${r.turns} | ${r.samples} | ${cell(r.meanJaccard)} | ${cell(r.meanCosine)} |`);
 }
