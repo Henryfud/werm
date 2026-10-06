@@ -1,0 +1,932 @@
+<title>WERM</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Martian+Mono:wght@300;400;500&display=swap">
+<style>
+/* Layout concept: one long descent. A pixel-dithered field of worms is fixed behind everything and reacts to scroll.
+   Full-bleed sections stack over it: hero, brain globe, body, genome, notes. Reading text sits on a solid panel. */
+:root {
+  --ink: #03050f;
+  --ink-2: #090c22;
+  --panel: #0a0e29;
+  --paper: #ece8e1;
+  --dim: #a09db4;
+  --violet: #8a22b8;
+  --blue: #3333ea;
+  --lime: #c9ff2e;
+  --rule: rgba(236, 232, 225, 0.24);
+  --display: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-size: 17px;
+  line-height: 1.55;
+  padding-inline: 0;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+#field {
+  position: fixed; inset: 0; width: 100vw; height: 100vh;
+  image-rendering: pixelated; image-rendering: crisp-edges;
+  z-index: 0; opacity: 0.8; pointer-events: none;
+}
+.page { position: relative; z-index: 1; }
+.wrap { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: 20px; }
+.mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; }
+
+/* nav */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: linear-gradient(var(--ink) 40%, rgba(3, 5, 15, 0));
+  padding-block: 16px;
+}
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-weight: 600; font-size: 22px; letter-spacing: -0.03em; text-decoration: none; }
+.logo b { color: var(--lime); font-weight: 600; }
+.nav nav { display: flex; gap: 22px; font-family: var(--mono); font-size: 12px; }
+.nav nav a { text-decoration: none; opacity: 0.85; }
+.nav nav a:hover { opacity: 1; color: var(--lime); }
+.btn {
+  display: inline-block; background: var(--lime); color: var(--ink);
+  font-family: var(--mono); font-size: 12px; font-weight: 500; text-decoration: none;
+  padding: 12px 18px; border-radius: 3px; border: 0; cursor: pointer;
+}
+.btn:hover { background: #fff; }
+.btn.ghost { background: transparent; color: var(--paper); border: 1px solid var(--rule); }
+.btn.ghost:hover { border-color: var(--lime); color: var(--lime); }
+@media (max-width: 760px) { .nav nav { display: none; } }
+
+/* hero */
+.hero { padding-top: 40px; padding-bottom: 0; min-height: 1040px; position: relative; }
+.hero h1 {
+  font-size: clamp(60px, 12.5vw, 190px);
+  line-height: 0.88; letter-spacing: -0.055em; font-weight: 600; margin: 0;
+  max-width: 11ch; text-wrap: balance;
+}
+.striped {
+  background: repeating-linear-gradient(0deg, var(--paper) 0 3px, transparent 3px 6px);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.hero p.lede { max-width: 46ch; font-family: var(--mono); font-size: 13px; line-height: 1.7; margin-top: 28px; }
+.acronym {
+  display: flex; flex-wrap: wrap; gap: 4px 0.55em; margin-top: 30px;
+  font-size: clamp(34px, 6.2vw, 88px); line-height: 1; letter-spacing: -0.045em; font-weight: 600;
+}
+.acronym b { color: var(--lime); font-weight: 700; }
+.acro-sub { max-width: 62ch; margin: 16px 0 0; line-height: 1.7; opacity: 0.88; }
+.hint { max-width: 62ch; margin: 22px 0 0; line-height: 1.7; opacity: 0.7; }
+#fieldLabels { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+.hero .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+.cards { position: absolute; right: 20px; top: 70px; width: 270px; z-index: 2; }
+.tag {
+  margin-left: auto; width: 190px; border: 1.5px solid var(--paper); border-radius: 10px;
+  padding: 8px 12px; background: var(--ink); font-family: var(--mono); font-size: 11px; line-height: 1.5;
+  position: relative; z-index: 2; margin-bottom: -2px;
+}
+.tag .dot { display: inline-block; width: 7px; height: 7px; background: var(--lime); border-radius: 50%; margin-right: 6px; }
+.stat {
+  border: 1.5px solid var(--paper); border-radius: 12px; background: var(--ink);
+  padding: 14px 16px 12px; font-family: var(--mono); font-size: 11px;
+}
+.stat .big { font-family: var(--display); font-size: 62px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; margin: 4px 0 10px; font-variant-numeric: tabular-nums; }
+.stat .rule { border-top: 1px dashed var(--paper); padding-top: 8px; display: flex; justify-content: space-between; gap: 8px; }
+@media (max-width: 980px) {
+  .cards { position: static; width: 100%; max-width: 330px; margin-top: 30px; }
+  .tag { margin-left: 0; }
+  .hero { min-height: 1000px; }
+}
+
+/* sections */
+section.band { padding-block: 110px; position: relative; }
+.band.solid { background: linear-gradient(180deg, rgba(3, 5, 15, 0), rgba(3, 5, 15, 0.38) 220px, rgba(3, 5, 15, 0.38) calc(100% - 120px), rgba(3, 5, 15, 0)); }
+h2 { font-size: clamp(38px, 6vw, 84px); line-height: 0.95; letter-spacing: -0.045em; font-weight: 600; margin: 0 0 24px; max-width: 14ch; text-wrap: balance; }
+h3 { font-size: 26px; letter-spacing: -0.02em; margin: 44px 0 12px; font-weight: 600; text-wrap: balance; }
+.sub { max-width: 58ch; color: var(--paper); opacity: 0.88; margin: 0 0 40px; }
+.twocol { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 36px; align-items: start; }
+@media (max-width: 900px) { .twocol { grid-template-columns: minmax(0, 1fr); } }
+.frame { border: 1.5px solid var(--paper); border-radius: 14px; background: rgba(3, 5, 15, 0.82); overflow: hidden; }
+.frame .bar { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-bottom: 1px dashed var(--paper); font-family: var(--mono); font-size: 11px; flex-wrap: wrap; }
+
+/* globe */
+#globeWrap { position: relative; aspect-ratio: 1 / 0.92; max-width: 100%; }
+#globe { width: 100%; height: 100%; display: block; cursor: grab; touch-action: pan-y; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; padding: 10px 14px; border-top: 1px dashed var(--paper); font-family: var(--mono); font-size: 11px; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+.pick { padding: 12px 14px; border-top: 1px dashed var(--paper); font-family: var(--mono); font-size: 11px; min-height: 64px; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-bottom: 18px; }
+.controls button {
+  font-family: var(--mono); font-size: 11px; text-align: left; padding: 11px 12px; color: var(--paper);
+  background: rgba(3, 5, 15, 0.8); border: 1px solid var(--rule); border-radius: 4px; cursor: pointer;
+}
+.controls button:hover { border-color: var(--lime); }
+.controls button[aria-pressed="true"] { background: var(--lime); color: var(--ink); border-color: var(--lime); }
+.meters { display: grid; gap: 12px; }
+.meter { font-family: var(--mono); font-size: 11px; }
+.meter .row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.meter .track { height: 10px; border: 1px solid var(--paper); border-radius: 2px; overflow: hidden; background: rgba(3, 5, 15, 0.7); }
+.meter .fill { height: 100%; width: 0%; background: var(--violet); transition: width 0.12s linear; }
+.meter.f .fill { background: var(--lime); }
+.meter.b .fill { background: var(--blue); }
+.params { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11px; }
+.params td, .params th { text-align: left; padding: 8px 10px; border-bottom: 1px dashed var(--rule); vertical-align: top; }
+.params th { font-weight: 400; color: var(--dim); }
+.params td.v { color: var(--lime); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* body */
+#bodyStage { width: 100%; height: 340px; display: block; image-rendering: pixelated; background: rgba(3, 5, 15, 0.7); }
+.anat { overflow-x: auto; }
+.anat svg { min-width: 760px; width: 100%; display: block; }
+.anat .draw { fill: none; stroke: var(--paper); stroke-width: 1.6; stroke-dasharray: 1; stroke-dashoffset: 0; vector-effect: non-scaling-stroke; }
+.anat .hot { stroke: var(--lime); }
+.anat text { font-family: var(--mono); font-size: 11px; fill: var(--paper); }
+.anat line.lead { stroke: var(--dim); stroke-width: 1; stroke-dasharray: 3 3; }
+.glossary { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px 32px; margin-top: 30px; }
+.glossary h4 { font-family: var(--mono); font-weight: 500; font-size: 12px; color: var(--lime); margin: 0 0 6px; }
+.glossary p { margin: 0; font-size: 15px; opacity: 0.9; }
+
+/* genome */
+.chroms { display: grid; gap: 14px; padding: 18px 14px; }
+.chrom { display: grid; grid-template-columns: 38px minmax(0, 1fr) 84px; gap: 12px; align-items: center; font-family: var(--mono); font-size: 11px; }
+.chrom .bar { height: 22px; border-radius: 11px; background: linear-gradient(90deg, var(--blue), var(--violet)); position: relative; min-width: 8px; }
+.chrom .bar::after { content: ""; position: absolute; inset: 0; border-radius: 11px; background-image: radial-gradient(rgba(201, 255, 46, 0.65) 1px, transparent 1.4px); background-size: 6px 6px; opacity: 0.35; }
+.chrom .len { text-align: right; font-variant-numeric: tabular-nums; }
+.scale { display: flex; justify-content: space-between; padding: 0 14px 14px 64px; padding-right: 98px; font-family: var(--mono); font-size: 10px; color: var(--dim); }
+.drop { padding: 16px 14px; border-top: 1px dashed var(--paper); }
+.drop input[type=file] { font-family: var(--mono); font-size: 11px; color: var(--paper); max-width: 100%; }
+#gcOut { display: grid; gap: 12px; margin-top: 14px; font-family: var(--mono); font-size: 11px; }
+#gcOut canvas { width: 100%; height: 28px; display: block; image-rendering: pixelated; border-radius: 4px; }
+.code { background: #05071a; border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; font-family: var(--mono); font-size: 12px; line-height: 1.7; overflow-x: auto; white-space: pre; position: relative; }
+.copy { position: absolute; right: 8px; top: 8px; font-family: var(--mono); font-size: 10px; background: transparent; color: var(--paper); border: 1px solid var(--rule); border-radius: 3px; padding: 4px 8px; cursor: pointer; }
+.copy:hover { border-color: var(--lime); color: var(--lime); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0; border-top: 1px solid var(--rule); margin-top: 40px; }
+.facts div { padding: 18px 16px 18px 0; border-bottom: 1px solid var(--rule); }
+.facts .n { font-size: 44px; letter-spacing: -0.04em; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
+.facts .l { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 6px; }
+
+/* notes (long read) */
+.notes { background: var(--ink); padding-block: 100px; border-top: 1px solid var(--rule); }
+.notes .wrap { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 60px; }
+.toc { position: sticky; top: 90px; align-self: start; font-family: var(--mono); font-size: 11px; line-height: 2; }
+.toc a { display: block; text-decoration: none; color: var(--dim); }
+.toc a:hover { color: var(--lime); }
+.prose { max-width: 66ch; }
+.prose h2 { font-size: clamp(34px, 4.6vw, 58px); max-width: none; margin-top: 70px; }
+.prose h2:first-child { margin-top: 0; }
+.prose p { margin: 0 0 1.2em; }
+.prose ul { padding-left: 1.2em; margin: 0 0 1.4em; }
+.prose li { margin-bottom: 0.5em; }
+.prose a { color: var(--lime); text-underline-offset: 3px; }
+.prose code { font-family: var(--mono); font-size: 0.82em; background: #101436; padding: 2px 6px; border-radius: 3px; }
+.eq { font-family: var(--mono); font-size: 13px; background: #05071a; border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; margin: 0 0 1.4em; overflow-x: auto; white-space: pre; line-height: 1.8; }
+.pull { border-left: 3px solid var(--lime); padding: 4px 0 4px 18px; font-size: 22px; line-height: 1.35; letter-spacing: -0.015em; margin: 1.6em 0; }
+.sources { font-size: 14px; }
+.sources li { word-break: break-word; }
+@media (max-width: 900px) { .notes .wrap { grid-template-columns: minmax(0, 1fr); gap: 20px; } .toc { display: none; } }
+
+footer { padding-block: 70px 90px; border-top: 1px solid var(--rule); background: var(--ink); }
+footer .wrap { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; align-items: flex-end; }
+footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-height: 0.9; font-weight: 600; margin: 0; }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+<div id="top"></div>
+<canvas id="field" aria-hidden="true"></canvas>
+<canvas id="fieldLabels" aria-hidden="true"></canvas>
+
+<div class="page">
+  <header class="nav">
+    <div class="wrap">
+      <a class="logo" href="#top">WERM</a>
+      <nav aria-label="Sections">
+        <a href="#brain">Brain</a>
+        <a href="#body">Body</a>
+        <a href="#genome">Genome</a>
+        <a href="#notes">Notes</a>
+      </nav>
+      <a class="btn" data-gh href="https://github.com/Henryfud/werm">GitHub</a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h1>Wired from the <span class="striped">worm</span></h1>
+      <div class="acronym" role="group" aria-label="WERM stands for Wiring-Encoded Recurrent Modulator">
+        <div><b>W</b>iring</div><div><b>E</b>ncoded</div><div><b>R</b>ecurrent</div><div><b>M</b>odulator</div>
+      </div>
+      <p class="mono acro-sub">That is what WERM stands for. The wiring comes from the real worm. It is encoded as a network. It is recurrent, so each moment leans on the last one. And it only modulates: all it does is nudge the dials on a language model.</p>
+      <p class="lede">A 302 neuron brain, copied from the real wiring diagram of C. elegans (a see-through worm about the size of a pinhead, and the first animal to have its entire brain mapped), running in this tab. It is small enough to read and strange enough to steer a language model.</p>
+      <div class="cta">
+        <a class="btn" href="#brain">Poke the brain</a>
+        <a class="btn ghost" href="#notes">Read the notes</a>
+      </div>
+      <p class="mono hint">Scroll down. The five worms in the background each run their own copy of this brain. They hunt for food, bump into each other and back away. Scrolling down pokes their tails, scrolling up pokes their heads.</p>
+      <aside class="cards" aria-label="Live readout">
+        <div class="tag"><span class="dot"></span>STATE <b id="heroState">resting</b><br><span id="heroInput" style="opacity:.7">input: none</span></div>
+        <div class="stat">
+          <div>NEURONS WIRED</div>
+          <div class="big" id="heroNeurons">302</div>
+          <div class="rule"><span>ACTIVE NOW</span><b id="heroActive">0</b></div>
+          <div class="rule" style="border-top-style:solid;border-top-color:var(--rule);margin-top:8px"><span>CONNECTIONS</span><b id="heroEdges">0</b></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="band solid" id="brain">
+    <div class="wrap">
+      <h2>The brain, on a globe</h2>
+      <p class="sub">Every dot is one of the 302 neurons in the adult hermaphrodite. Sensory neurons sit near the top, motor neurons near the bottom, interneurons in the band between. Arcs are real synapses from the Cook et al. 2019 wiring diagram. Drag to spin it. Click a dot to fire that neuron.</p>
+      <div class="twocol">
+        <div class="frame">
+          <div class="bar"><span>CONNECTOME / HERMAPHRODITE</span><span id="globeNote">drag to rotate</span></div>
+          <div id="globeWrap"><canvas id="globe" aria-label="Rotating globe of 302 neurons"></canvas></div>
+          <div class="legend">
+            <span><i style="background:var(--lime)"></i>sensory</span>
+            <span><i style="background:#c65cf0"></i>interneuron</span>
+            <span><i style="background:#6f6cff"></i>motor</span>
+            <span><i style="background:var(--paper)"></i>other</span>
+          </div>
+          <div class="pick" id="pick">Nothing picked yet. Click a neuron.</div>
+        </div>
+        <div>
+          <div class="controls" id="stimButtons" role="group" aria-label="Stimuli"></div>
+          <div class="meters">
+            <div class="meter f"><div class="row"><span>forward command (AVB, PVC)</span><b id="mF">0.00</b></div><div class="track"><div class="fill" id="bF"></div></div></div>
+            <div class="meter b"><div class="row"><span>backward command (AVA, AVD, AVE)</span><b id="mB">0.00</b></div><div class="track"><div class="fill" id="bB"></div></div></div>
+            <div class="meter"><div class="row"><span>whole network arousal</span><b id="mA">0.00</b></div><div class="track"><div class="fill" id="bA"></div></div></div>
+          </div>
+          <p class="mono" style="margin-top:18px;opacity:.75;line-height:1.7">Touching the tail should push the forward command up. Touching the head and bumping the nose should push the backward command up. The model gets three of those four right. The notes below say which one it misses and why.</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:80px">The steering layer</h3>
+      <p class="sub">This is how the worm touches a local language model. The worm does not make the model smarter. It nudges how the model talks, the way a mood would. These numbers update live from the brain above, and the same code is in the repo.</p>
+      <div class="twocol">
+        <div class="frame">
+          <div class="bar"><span>WORM STATE TO SAMPLING SETTINGS</span><span id="steerMode">resting</span></div>
+          <table class="params" aria-label="Live steering values">
+            <tr><th>setting</th><th>value</th><th>how it moves</th></tr>
+            <tr><td>temperature</td><td class="v" id="sTemp">0.00</td><td>rises with whole network arousal</td></tr>
+            <tr><td>top_p</td><td class="v" id="sTop">0.00</td><td>rises with sensory activity</td></tr>
+            <tr><td>repeat_penalty</td><td class="v" id="sRep">0.00</td><td>rises when the worm backs up</td></tr>
+            <tr><td>num_predict</td><td class="v" id="sNum">0</td><td>longer answers while it crawls forward</td></tr>
+          </table>
+        </div>
+        <div>
+          <div class="code" id="steerCode"><button class="copy" data-copy="steerCode">copy</button>git clone GH_URL
+cd werm
+npm test
+node src/cli.mjs sim --stim touch-tail
+ollama pull llama3.2
+node src/cli.mjs chat --model llama3.2</div>
+          <p class="mono" style="margin-top:14px;opacity:.75;line-height:1.7">Chat mode pokes the worm based on your message (a question, a thank you, an angry word), reads its state, and sends the sampling settings to Ollama on your own machine. Nothing leaves it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band solid" id="body">
+    <div class="wrap">
+      <h2>The body it came from</h2>
+      <p class="sub">One millimetre long, transparent, and about three days from egg to adult at room temperature. Scroll and the outline draws itself. The worm below uses the same brain: its wave speed and direction come from the motor neuron readout, so poking the head makes it back up.</p>
+      <div class="frame anat" id="anat">
+        <div class="bar"><span>C. ELEGANS / ADULT HERMAPHRODITE / SIDE VIEW (SCHEMATIC)</span><span>not to scale</span></div>
+        <svg viewBox="0 0 1000 280" role="img" aria-label="Schematic side view of the worm showing pharynx, nerve ring, intestine, gonad, vulva and tail">
+          <path class="draw" pathLength="1" d="M60,140 C70,108 140,98 240,102 C420,108 640,124 800,118 C880,114 930,124 975,140 C930,156 880,166 800,162 C640,156 420,172 240,178 C140,182 70,172 60,140 Z"/>
+          <path class="draw hot" pathLength="1" d="M72,140 C100,132 120,148 150,140 C170,134 190,146 215,140"/>
+          <ellipse class="draw hot" pathLength="1" cx="148" cy="140" rx="9" ry="26"/>
+          <path class="draw" pathLength="1" d="M215,140 C300,128 340,152 430,140 S560,128 650,142 S800,150 900,140"/>
+          <path class="draw" pathLength="1" d="M330,126 C380,112 470,112 520,124 C470,134 390,134 330,126"/>
+          <path class="draw" pathLength="1" d="M340,156 C400,170 520,168 560,150 C520,146 400,148 340,156"/>
+          <path class="draw" pathLength="1" d="M520,162 L520,176 M512,176 L528,176"/>
+          <path class="draw" pathLength="1" d="M975,140 L996,140"/>
+          <line class="lead" x1="148" y1="114" x2="148" y2="46"/><text x="148" y="36" text-anchor="middle">nerve ring</text>
+          <line class="lead" x1="100" y1="150" x2="100" y2="232"/><text x="100" y="250" text-anchor="middle">pharynx</text>
+          <line class="lead" x1="430" y1="140" x2="430" y2="70"/><text x="430" y="60" text-anchor="middle">intestine</text>
+          <line class="lead" x1="440" y1="170" x2="440" y2="232"/><text x="440" y="250" text-anchor="middle">gonad arms</text>
+          <line class="lead" x1="520" y1="178" x2="620" y2="232"/><text x="620" y="250" text-anchor="middle">vulva</text>
+          <line class="lead" x1="960" y1="140" x2="960" y2="80"/><text x="960" y="70" text-anchor="middle">tail</text>
+        </svg>
+      </div>
+      <div class="glossary">
+        <div><h4>pharynx</h4><p>A muscular pump that grinds bacteria. It has its own small nervous system of 20 neurons.</p></div>
+        <div><h4>nerve ring</h4><p>The densest knot of wiring in the animal, circling the pharynx. Most of the 302 neurons send fibres through it.</p></div>
+        <div><h4>intestine</h4><p>A tube of 20 cells that digests food and makes yolk for the eggs.</p></div>
+        <div><h4>gonad</h4><p>Two U shaped arms. The adult hermaphrodite makes sperm first, then eggs, and can fertilise itself.</p></div>
+        <div><h4>vulva</h4><p>The opening where eggs leave. Two serotonin neurons, HSNL and HSNR, drive egg laying, and both are in the data on this page.</p></div>
+        <div><h4>body wall muscle</h4><p>Four strips of muscle run along the body. Motor neurons fire them in waves, and the worm crawls in S shapes.</p></div>
+      </div>
+
+      <div class="frame" style="margin-top:44px">
+        <div class="bar"><span>LIVE BODY / DRIVEN BY THE BRAIN ABOVE</span><span id="bodyNote">resting</span></div>
+        <canvas id="bodyStage" aria-label="A worm moving under the control of the simulated brain"></canvas>
+        <div class="controls" id="bodyButtons" style="margin:0;padding:12px 14px;border-top:1px dashed var(--paper)"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band solid" id="genome">
+    <div class="wrap">
+      <h2>The genome, to scale</h2>
+      <p class="sub">About 100 million letters of DNA on six chromosomes. In 1998 it became the first animal genome to be fully sequenced. These bars are drawn from the real chromosome lengths in the NCBI reference, GCF_000002985.6.</p>
+      <div class="twocol">
+        <div class="frame">
+          <div class="bar"><span>REFERENCE GENOME / C. ELEGANS</span><span>megabases</span></div>
+          <div class="chroms" id="chroms"></div>
+          <div class="scale"><span>0</span><span>5</span><span>10</span><span>15</span><span>20 Mb</span></div>
+          <div class="drop">
+            <div class="mono" style="margin-bottom:10px">Want the letters themselves? Run the fetch script once, then drop the FASTA file here. Your browser reads it locally and draws a GC map. Nothing is uploaded.</div>
+            <input type="file" id="fasta" accept=".fa,.fasta,.fna,.txt" aria-label="Choose a genome FASTA file">
+            <div id="gcOut"></div>
+          </div>
+        </div>
+        <div>
+          <div class="code" id="fetchCode"><button class="copy" data-copy="fetchCode">copy</button>bash scripts/fetch_genome.sh
+node scripts/genome_stats.mjs data/genome/c_elegans.fasta</div>
+          <p class="mono" style="margin:14px 0 0;opacity:.75;line-height:1.7">The script pulls the six chromosomes and the mitochondrial genome from NCBI by accession number and joins them into one file. I could not download the sequence while building this page, so I did not draw a fake one. What you see above is measured. What you load is yours.</p>
+        </div>
+      </div>
+      <div class="facts" id="facts"></div>
+    </div>
+  </section>
+
+  <section class="notes" id="notes">
+    <div class="wrap">
+      <nav class="toc" aria-label="Notes contents">
+        <a href="#n-why">Why a worm</a>
+        <a href="#n-life">Life of a worm</a>
+        <a href="#n-genome">The genome</a>
+        <a href="#n-wiring">The wiring diagram</a>
+        <a href="#n-nobel">Prizes</a>
+        <a href="#n-liquid">Liquid networks</a>
+        <a href="#n-openworm">OpenWorm</a>
+        <a href="#n-model">Our model</a>
+        <a href="#n-limits">What it cannot do</a>
+        <a href="#n-run">Run it</a>
+        <a href="#n-sources">Sources</a>
+      </nav>
+      <article class="prose">
+        <h2 id="n-why">Why a worm</h2>
+        <p>Caenorhabditis elegans is a roundworm about a millimetre long. It lives in soil and rotting fruit, eats bacteria, and has no business being famous. It became famous because of a decision made in the 1960s. Sydney Brenner and his colleagues picked it as a model animal, and nearly everything useful about it follows from that choice.</p>
+        <p>It is transparent, so you can watch cells divide inside a living animal under an ordinary microscope. It grows on a plate of agar. It goes from egg to adult in about three days and lives a few weeks. Most individuals are self fertilising hermaphrodites, so a single worm starts a whole population, and a rare male lets you cross strains when you need to. An adult hermaphrodite has 959 somatic cells, and the lineage of every one of them has been traced from the fertilised egg.</p>
+        <p class="pull">An animal small enough to hold in your head, with a nervous system small enough to draw.</p>
+        <p>That last point is why this project exists. A human brain has tens of billions of neurons. The worm has 302. Someone could sit down with an electron microscope and map every one, and in the 1980s someone did.</p>
+
+        <h2 id="n-life">Life of a worm</h2>
+        <p>A worm hatches as a larva and moves through four larval stages, called L1 to L4, before becoming an adult. At room temperature the whole trip takes roughly three days. If food runs out or the plate gets crowded, a young larva can switch into a tough, non eating form called a dauer. Dauer larvae can wait out hard times for weeks and then resume normal life when conditions improve.</p>
+        <p>The nervous system changes through that journey. About a quarter of the adult neurons are born after hatching. A larva starts life with around 1,300 synapses and an adult ends up with roughly 8,000. A 2021 study by Daniel Witvliet and colleagues reconstructed eight worms from newborn to adult and found that most of the added synapses strengthen connections that already existed at birth. Only about a quarter linked a neuron to a new partner.</p>
+        <p>Worms also differ from each other. The same 302 neurons appear in the same places in every hermaphrodite, but each animal has its own particular synapses. That matters for this project, because the wiring diagram on this page comes from specific animals and is a sample of what a worm can be, not a single fixed blueprint.</p>
+
+        <h2 id="n-genome">The genome</h2>
+        <p>The reference genome is about 100 million base pairs long, split across five autosomes and the X chromosome, plus a small circular mitochondrial genome of 13,794 bases. Chromosome V is the longest at roughly 20.9 million bases. Chromosome III is the shortest at roughly 13.8 million. The bars in the genome section above use the exact lengths from the NCBI RefSeq record.</p>
+        <p>It is rich in A and T. Close to 65 percent of the letters are one of those two. The consortium that sequenced it published the result in Science in 1998, and the sequence has been revised and gap filled since then until it ran from telomere to telomere on every chromosome.</p>
+        <p>Counting genes is harder than counting bases because the answer depends on what you call a gene. WormBase, the community database, reported about 19,985 protein coding genes in its 2022 update, out of 49,187 genes in total once non coding RNA genes and others are included. Earlier annotation rounds put the protein coding count a little lower, near 19,700. The number keeps moving by small amounts as curators find new exons and merge or split predictions.</p>
+        <p>A large share of those genes have recognisable counterparts in humans, which is the main reason a worm is useful for studying disease. Researchers have compiled lists of worm genes with human orthologs, such as the OrthoList resource, so that a worm experiment can be matched to a human gene of interest.</p>
+        <p>Nothing on this page claims the genome runs the simulation. The genome is the instruction set that builds the worm. The connectome is what the finished nervous system looks like. They are different layers, and the project treats them that way: the genome section is a viewer and a data pipeline, and the brain is built from the wiring.</p>
+
+        <h2 id="n-wiring">The wiring diagram</h2>
+        <p>The first complete map of any nervous system was published in 1986 by John White, Eileen Southgate, Nichol Thomson and Sydney Brenner. They sliced a worm into thousands of ultrathin sections, imaged each one by electron microscope, and followed every fibre by hand. The result listed 302 neurons and about 7,000 synapses and gap junctions. It is still the reference point for the field.</p>
+        <p>Later work refined it. Varshney and colleagues rebuilt the hermaphrodite somatic network in 2011. Steven Cook and colleagues published whole animal connectomes for both sexes in 2019, covering muscles and other tissues as well as neurons. The dataset behind this page is the Cook 2019 hermaphrodite network, as packaged by the OpenWorm Connectome Toolbox.</p>
+        <p>After cleaning, it contains 302 neurons, 3,709 directed chemical connections and 1,105 gap junction pairs between neurons. The counts on the page above are computed from the data file when it loads. A chemical synapse sends a signal one way using a neurotransmitter. A gap junction is a direct electrical link that lets current pass in both directions.</p>
+        <p>A wiring diagram is a map of what is connected to what, and how strongly. It does not tell you which synapses excite their targets and which inhibit them. It does not include the slower chemical signalling that runs through the whole animal by neuropeptides and monoamines. People are working on those layers, and the OpenWorm toolbox lists datasets for them. We do not use them here.</p>
+
+        <h2 id="n-nobel">Prizes</h2>
+        <p>This worm has been behind a surprising number of Nobel prizes. The 2002 Prize in Physiology or Medicine went to Sydney Brenner, Robert Horvitz and John Sulston for how genes control organ development and programmed cell death. In 2006, Andrew Fire and Craig Mello won for RNA interference, which they discovered in worms. In 2008, Martin Chalfie shared the Chemistry prize for green fluorescent protein, which he first used as a marker in C. elegans neurons. In 2024, Victor Ambros and Gary Ruvkun won for microRNA, again from worm genetics. A New York Times piece in 2024 counted at least four prizes tied to the animal, and the list above is the one I would give.</p>
+
+        <h2 id="n-liquid">Liquid networks</h2>
+        <p>The strongest link between this worm and modern AI is the liquid neural network. Ramin Hasani, Mathias Lechner, Daniela Rus and colleagues at MIT drew on the worm's nervous system to design networks whose neurons are described by differential equations. In a standard network the connections are fixed once training ends. In a liquid network the time constant of each unit shifts with its input, so the network keeps adapting after training.</p>
+        <p>An early version of the idea modelled the tap withdrawal circuit, the small set of neurons that makes the worm recoil from a tap on the plate. The researchers called these Neuronal Circuit Policies. They used them to control an inverted pendulum in simulation and to park a real rover along a set path. Hasani went on to co-found Liquid AI. The pitch for these networks is that they are compact, they cope with noisy time series such as video and sensor streams, and a person can follow what each cell is doing.</p>
+        <p>The model on this page borrows the same shape of idea at a very small scale. Each neuron is a leaky unit, and the incoming signal opens a gate that speeds up how fast the unit moves toward its target. That is the liquid time constant in one line.</p>
+
+        <h2 id="n-openworm">OpenWorm</h2>
+        <p>OpenWorm is an open science project that has spent about a decade trying to simulate the whole animal. It is organised as a set of parts. c302 builds neuron models of the whole nervous system in NeuroML at several levels of detail, from simple integrate and fire cells up to Hodgkin Huxley style conductance models. Sibernetic simulates the physical body and the fluid around it. Geppetto is a browser based visualisation and simulation engine. The ConnectomeToolbox collects published wiring datasets in one Python package, and that is where the wiring data used here came from.</p>
+        <p>WERM is not a part of that effort and does not compete with it. If you want a faithful biophysical simulation, use c302. If you want something small that runs in a browser tab and can be taken apart in an afternoon, that is the gap this project fills.</p>
+
+        <h2 id="n-model">Our model</h2>
+        <p>Each of the 302 neurons has one number, its activation level x. The update rule for every neuron is:</p>
+        <div class="eq">f  = sigmoid( slope * (drive - offset) )
+dx/dt = -(1/tau + f) * x + f * amp</div>
+        <p>Here drive is the sum of chemical input, gap junction input and any outside stimulus, minus a global inhibition term. Chemical input from neuron j into neuron i is the log of the synapse count times the presynaptic activation, divided by how much neuron i listens in total. Neurons that release GABA, such as DD, VD, RME, AVL, DVB and RIS, count as inhibitory. Everything else counts as excitatory.</p>
+        <p>The gate f is the liquid part. More drive means a larger f, which makes the neuron both decay faster and aim higher. A neuron with no input settles near zero.</p>
+        <p>The first version of this network was either dead or saturated, which is common for a wiring diagram that is mostly excitatory. Stable behaviour needed a baseline subtraction on the activation curve and a global inhibition term. I then tuned a handful of parameters by hand so that touch inputs produce the reflexes the literature describes. That is the honest summary: it is a hand tuned model, not a fit to recordings.</p>
+        <p>With the settings in the repo, tail touch drives the forward command, nose touch and a noxious stimulus drive the backward command, and head touch does not reliably do so. I left that last test in the suite and marked it as a known miss. A model that always agrees with you is not showing you anything.</p>
+
+        <h2 id="n-limits">What it cannot do</h2>
+        <ul>
+          <li>It cannot tell you what a real worm will do. There are no muscles and no body physics in the brain model, and the swimming worm on this page is a kinematic drawing driven by two numbers from the network.</li>
+          <li>Synapse signs are approximated. Only a handful of inhibitory cell types are marked, and many neurons release different transmitters onto different targets.</li>
+          <li>It has no neuropeptides or monoamines, which shape behaviour in real worms on timescales of minutes to hours.</li>
+          <li>The steering layer is a design choice. Mapping arousal to temperature is something I picked because it is easy to see, not because neuroscience says it should be so.</li>
+          <li>The worm does not think for the language model. It sets a few sampling numbers and a tone instruction, and the model does the rest.</li>
+        </ul>
+
+        <h2 id="n-run">Run it</h2>
+        <p>The whole project is a small Node repository with no build step for the simulation. Clone it, run the tests, try a stimulus, then wire it to a local model if you want to.</p>
+        <div class="code" id="runCode"><button class="copy" data-copy="runCode">copy</button>git clone GH_URL
+cd werm
+npm test
+node src/cli.mjs sim --stim noxious
+bash scripts/fetch_genome.sh
+ollama pull llama3.2
+node src/cli.mjs chat --model llama3.2</div>
+        <p style="margin-top:1.2em">To rebuild the connectome file from the source workbook, see <code>scripts/build_connectome.py</code>. To rebuild this page, run <code>npm run build:site</code>.</p>
+
+        <h2 id="n-sources">Sources</h2>
+        <ul class="sources">
+          <li><a href="https://wiki.wormbase.org/index.php/Worm_numbers">WormBase, Worm numbers</a> (genome size and base composition)</li>
+          <li><a href="https://www.genome.jp/kegg-bin/show_organism?org=cel">KEGG, Caenorhabditis elegans reference genome</a> (chromosome lengths, RefSeq accessions, 1998 Science citation)</li>
+          <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8982018">WormBase in 2022</a> (gene counts, WBcel235 reference)</li>
+          <li><a href="https://genome.cshlp.org/cgi/content/full/15/12/1651">Genomics in C. elegans: so many genes, such a little worm</a> (telomere to telomere sequence, earlier gene counts)</li>
+          <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3102077/">OrthoList: a compendium of C. elegans genes with human orthologs</a></li>
+          <li><a href="https://openworm.org/ConnectomeToolbox/">OpenWorm Connectome Toolbox</a> (data sources and datasets)</li>
+          <li><a href="https://openworm.org/ConnectomeToolbox/Witvliet_2021/">Witvliet et al. 2021, Connectomes across development</a>, Nature 596, 257 to 261</li>
+          <li><a href="https://www.mcb.harvard.edu/department/news/zhen-samuel-and-lichtman-labs-generate-complete-synaptic-census-of-the-c-elegans-bra">Harvard MCB news on the Witvliet synaptic census</a></li>
+          <li><a href="https://www.frontiersin.org/journals/neural-circuits/articles/10.3389/fncir.2018.00094/pdf">Mulcahy et al. 2018, Frontiers in Neural Circuits</a> (history of the connectome, post embryonic neurons)</li>
+          <li>Cook et al. 2019, Whole animal connectomes of both Caenorhabditis elegans sexes, Nature 571, 63 to 71</li>
+          <li><a href="https://www.sciencedaily.com/releases/2021/01/210128091153.htm">MIT, liquid machine learning system adapts to changing conditions</a></li>
+          <li><a href="https://quantamagazine.org/researchers-discover-a-more-flexible-approach-to-machine-learning-20230207">Quanta Magazine on liquid neural networks</a></li>
+          <li><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4697589/">The OpenWorm Project: currently available resources and future plans</a></li>
+          <li><a href="https://github.com/openworm/c302">openworm/c302 on GitHub</a></li>
+          <li><a href="https://www.hobertlab.org/wp-content/uploads/2024/10/These-Tiny-Worms-Account-for-at-Least-4-Nobel-Prizes-The-New-York-Times.pdf">The New York Times, these tiny worms account for at least 4 Nobel prizes</a></li>
+          <li><a href="https://oge.mit.edu/?p=101148">MIT, Ambros and Ruvkun share the 2024 Nobel Prize in Physiology or Medicine</a></li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p class="big">Take it<br>apart.</p>
+      <div style="display:grid;gap:12px;justify-items:start">
+        <a class="btn" data-gh href="https://github.com/Henryfud/werm">Open the repo on GitHub</a>
+        <span class="mono" style="opacity:.7">MIT licensed. Connectome data from Cook et al. 2019 via OpenWorm.</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+/*__CONNECTOME__*/
+/*__NETWORK__*/
+</script>
+<script>
+(() => {
+"use strict";
+const GH = "__GITHUB_URL__";
+const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const PAL = { blue: [51, 51, 234], violet: [138, 34, 184], orchid: [190, 80, 232], lime: [201, 255, 46] };
+
+document.querySelectorAll("[data-gh]").forEach((a) => (a.href = GH));
+document.querySelectorAll(".code").forEach((el) => {
+  for (const n of el.childNodes) if (n.nodeType === 3) n.textContent = n.textContent.replace(/GH_URL/g, GH);
+});
+document.querySelectorAll(".copy").forEach((b) => b.addEventListener("click", async () => {
+  const el = $(b.dataset.copy);
+  const text = Array.from(el.childNodes).filter((n) => n.nodeType === 3).map((n) => n.textContent).join("").trim();
+  try { await navigator.clipboard.writeText(text); b.textContent = "copied"; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "selected"; }
+  setTimeout(() => (b.textContent = "copy"), 1400);
+}));
+
+/* ---------- the brain ---------- */
+const brain = new WormBrain(CONNECTOME);
+brain.run(1.2);
+const neurons = CONNECTOME.neurons;
+const edgesTotal = CONNECTOME.edges.length;
+let synapseSum = 0; for (const e of CONNECTOME.edges) synapseSum += e.w;
+$("heroEdges").textContent = edgesTotal.toLocaleString();
+$("heroNeurons").textContent = neurons.length;
+
+const state = { stim: new Set(), auto: true, autoTimer: 0, autoKey: null, picked: null, pickedOn: false };
+const stimKeys = Object.keys(STIMULI);
+function refreshInputs() {
+  brain.clearInput();
+  for (const k of state.stim) brain.stimulate(k, true);
+  if (state.picked != null && state.pickedOn) brain.setInput([neurons[state.picked].id], 1.8);
+  document.querySelectorAll("[data-stim]").forEach((b) => b.setAttribute("aria-pressed", String(state.stim.has(b.dataset.stim))));
+  const names = [...state.stim];
+  if (state.picked != null && state.pickedOn) names.push(neurons[state.picked].id);
+  $("heroInput").textContent = "input: " + (names.length ? names.join(", ") : "none") + (state.auto && names.length && state.autoKey ? " (demo)" : "");
+}
+function buildButtons(host) {
+  stimKeys.forEach((k) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.dataset.stim = k; b.setAttribute("aria-pressed", "false");
+    b.innerHTML = STIMULI[k].label + '<br><span style="opacity:.6">' + STIMULI[k].cells.slice(0, 3).join(" ") + (STIMULI[k].cells.length > 3 ? " ..." : "") + "</span>";
+    b.addEventListener("click", () => {
+      state.auto = false; state.autoKey = null;
+      if (state.stim.has(k)) state.stim.delete(k); else state.stim.add(k);
+      refreshInputs();
+    });
+    host.appendChild(b);
+  });
+}
+buildButtons($("stimButtons"));
+buildButtons($("bodyButtons"));
+
+/* demo input so the page is alive before anyone touches it */
+function autoStep(dt) {
+  if (!state.auto) return;
+  state.autoTimer -= dt;
+  if (state.autoTimer > 0) return;
+  if (state.autoKey) { state.stim.delete(state.autoKey); state.autoKey = null; state.autoTimer = 3.2; }
+  else { state.autoKey = ["touch-tail", "nose-touch", "touch-head", "noxious", "food-smell"][Math.floor(Math.random() * 5)]; state.stim.add(state.autoKey); state.autoTimer = 2.4; }
+  refreshInputs();
+}
+
+/* ---------- worms (kinematic bodies) ---------- */
+class Worm {
+  constructor(seed, len, x, y, depth) {
+    this.rand = mulberry32(seed);
+    this.n = 34; this.len = len; this.seg = len / this.n;
+    this.x = x; this.y = y; this.h = this.rand() * 6.28; this.phase = this.rand() * 6.28;
+    this.k = 0.34 + this.rand() * 0.12; this.depth = depth; this.turn = 0; this.omega = 3; this.amp = 0.5; this.speed = 0;
+    this.pts = Array.from({ length: this.n }, () => [x, y]);
+  }
+  update(dt, omega, amp, speed, W, H, aim) {
+    this.omega += (omega - this.omega) * Math.min(1, dt * 4);
+    this.amp += (amp - this.amp) * Math.min(1, dt * 4);
+    this.speed += (speed - this.speed) * Math.min(1, dt * 4);
+    this.phase += this.omega * dt;
+    this.turn += (this.rand() - 0.5) * dt * 6; this.turn *= 1 - dt * 1.5;
+    this.h += this.turn * dt;
+    if (aim != null) { let d = aim - this.h; d = Math.atan2(Math.sin(d), Math.cos(d)); this.h += clamp(d, -0.8, 0.8) * dt * 2.2; }
+    this.x += Math.cos(this.h) * this.speed * dt; this.y += Math.sin(this.h) * this.speed * dt;
+    const m = this.len + 20;
+    if (this.x < -m) this.x = W + m; if (this.x > W + m) this.x = -m;
+    if (this.y < -m) this.y = H + m; if (this.y > H + m) this.y = -m;
+    let px = this.x, py = this.y;
+    for (let i = 0; i < this.n; i++) {
+      const env = 0.35 + 0.65 * Math.min(1, i / 8);
+      const th = this.h + this.amp * env * Math.sin(this.k * i * 2.2 - this.phase);
+      this.pts[i][0] = px; this.pts[i][1] = py;
+      px -= Math.cos(th) * this.seg; py -= Math.sin(th) * this.seg;
+    }
+  }
+  draw(ctx, yOff, r0) {
+    for (let i = 0; i < this.n; i++) {
+      const t = i / (this.n - 1);
+      const r = r0 * (0.55 + 0.45 * Math.sin(Math.PI * Math.min(1, t * 1.15 + 0.05)));
+      ctx.beginPath(); ctx.arc(this.pts[i][0], this.pts[i][1] + yOff, Math.max(1.2, r), 0, 6.283); ctx.fill();
+    }
+  }
+}
+
+/* ---------- pixel stage: draw worms, then dither into the palette ---------- */
+const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+class PixelStage {
+  constructor(canvas, cell, opts) {
+    this.c = canvas; this.cell = cell; this.opts = opts;
+    this.src = document.createElement("canvas"); this.sctx = this.src.getContext("2d", { willReadFrequently: true });
+    this.ctx = canvas.getContext("2d"); this.worms = []; this.t = 0;
+    this.resize();
+  }
+  resize() {
+    const r = this.c.getBoundingClientRect();
+    this.W = Math.max(40, Math.ceil(r.width / this.cell)); this.H = Math.max(30, Math.ceil(r.height / this.cell));
+    this.c.width = this.W; this.c.height = this.H; this.src.width = this.W; this.src.height = this.H;
+    this.img = this.ctx.createImageData(this.W, this.H);
+  }
+  render(dt, scrollY) {
+    this.t += dt;
+    const { W, H, sctx } = this;
+    sctx.clearRect(0, 0, W, H);
+    sctx.fillStyle = "rgba(255,255,255,0.42)";
+    for (const w of this.worms) w.draw(sctx, this.opts.parallax ? -scrollY * w.depth / this.cell : 0, w.r0);
+    if (this.opts.extra) this.opts.extra(sctx, this.t, dt);
+    const src = sctx.getImageData(0, 0, W, H).data;
+    const out = this.img.data;
+    const terr = this.opts.terrain ? (this.opts.terrainBase() - scrollY) / this.cell : 1e9;
+    const t = this.t;
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        const i = (y * W + x) * 4;
+        let v = src[i + 3] / 255;
+        let speck = false;
+        if (terr < H) {
+          const edge = terr + 5 * Math.sin(x * 0.045 + t * 0.4) + 3.2 * Math.sin(x * 0.12 - t * 0.7) + 2 * Math.sin(x * 0.31 + t * 1.3) + (x > W * 0.64 && x < W * 0.9 ? -16 * Math.exp(-Math.pow((x - W * 0.77) / (W * 0.08), 2)) : 0);
+          const d = y - edge;
+          if (d > 0) { if (d < 60) v = Math.max(v, (0.34 + 0.16 * Math.sin(x * 0.07 + y * 0.09 - t * 0.5) * Math.cos(y * 0.05 + t * 0.3)) * (1 - d / 60)); }
+          else if (d > -4 && ((x * 73856093) ^ (y * 19349663) ^ Math.floor(t * 4)) % 11 < 2 && (Math.sin(x * 0.2 + t) > -0.3)) { v = Math.max(v, 0.9); speck = true; }
+          if (d > 0 && d < 3) { v = Math.max(v, 0.62); }
+        }
+        const b = BAYER[(y & 3) * 4 + (x & 3)] / 16 - 0.5;
+        const q = v + b * 0.32;
+        let c = null;
+        if (q > 0.86) c = PAL.lime; else if (q > 0.64) c = PAL.orchid; else if (q > 0.42) c = PAL.violet; else if (q > 0.22) c = PAL.blue;
+        if (c) { out[i] = c[0]; out[i + 1] = c[1]; out[i + 2] = c[2]; out[i + 3] = 255; } else { out[i + 3] = 0; }
+      }
+    }
+    this.ctx.putImageData(this.img, 0, 0);
+  }
+}
+
+const field = new PixelStage($("field"), 5, { terrain: true, parallax: false, extra: (c, t, d) => drawFood(c, t, d), terrainBase: () => (document.querySelector(".hero")?.offsetHeight || 880) - 120 });
+const bodyStage = new PixelStage($("bodyStage"), 3, { terrain: false, parallax: false });
+/* five agents. each has its own copy of the brain, its own body, and reacts to what it touches */
+const foods = [], rings = [], agents = [];
+const KEYS = ["food-smell", "nose-touch", "touch-head", "touch-tail"];
+function spawnFood(i) { const m = 18; foods[i] = { x: m + Math.random() * (field.W - 2 * m), y: m + Math.random() * (field.H - 2 * m) }; }
+function drawFood(ctx, t, dt) {
+  ctx.fillStyle = "rgba(255,255,255,1)";
+  for (const f of foods) { const r = 1.5 + 0.6 * Math.sin(t * 3 + f.x); ctx.beginPath(); ctx.arc(f.x, f.y, r, 0, 6.283); ctx.fill(); }
+  ctx.strokeStyle = "rgba(255,255,255,0.75)"; ctx.lineWidth = 1;
+  for (let i = rings.length - 1; i >= 0; i--) { const g = rings[i]; g.age += dt || 0.016; if (g.age > 0.9) { rings.splice(i, 1); continue; } ctx.beginPath(); ctx.arc(g.x, g.y, 3 + g.age * 26, 0, 6.283); ctx.stroke(); }
+}
+function seedWorms() {
+  bodyStage.worms = [];
+  foods.length = 0; rings.length = 0; agents.length = 0; field.worms = [];
+  for (let i = 0; i < 7; i++) spawnFood(i);
+  const specs = [[11, 96, 0.2, 0.28], [23, 74, 0.72, 0.4], [37, 84, 0.4, 0.72], [41, 64, 0.85, 0.82], [53, 104, 0.12, 0.9]];
+  specs.forEach(([seed, len, fx, fy], i) => {
+    const w = new Worm(seed, len * (field.W / 280), field.W * fx, field.H * fy, 0);
+    w.r0 = 3.4 + (i % 3) * 0.7; field.worms.push(w);
+    const b = new WormBrain(CONNECTOME, {}, 100 + i); b.run(1.2); const r0 = b.readout();
+    agents.push({ w, b, base: (r0.motorFwd - r0.motorBack) + r0.drive, t: {}, sig: "", acc: 0, eatT: 0, eaten: 0, label: "roaming", name: "W" + (i + 1) });
+  });
+  const bw = new Worm(5, bodyStage.W * 0.42, bodyStage.W * 0.7, bodyStage.H * 0.5, 0); bw.r0 = 5.5; bw.h = Math.PI; bodyStage.worms.push(bw);
+}
+seedWorms();
+function poke(a, key, dur) { a.t[key] = Math.max(a.t[key] || 0, dur); }
+function updateAgents(dt, kick, sv) {
+  const W = field.W, H = field.H, smellR = 120, eatR = 6, contactR = 5.5;
+  for (let i = 0; i < agents.length; i++) {
+    const a = agents[i], w = a.w, hx = w.pts[0][0], hy = w.pts[0][1];
+    let nd = 1e9, nf = -1;
+    for (let k = 0; k < foods.length; k++) { const d = Math.hypot(foods[k].x - hx, foods[k].y - hy); if (d < nd) { nd = d; nf = k; } }
+    if (nd < smellR) poke(a, "food-smell", 0.3);
+    if (nd < eatR) { rings.push({ x: foods[nf].x, y: foods[nf].y, age: 0 }); spawnFood(nf); a.eatT = 1.4; a.eaten++; }
+    for (let j = 0; j < agents.length; j++) {
+      if (j === i) continue;
+      const o = agents[j].w;
+      for (let k = 0; k < o.n; k += 2) {
+        if (Math.hypot(o.pts[k][0] - hx, o.pts[k][1] - hy) < contactR) {
+          poke(a, "nose-touch", 0.6);
+          if (k > o.n * 0.6) poke(agents[j], "touch-tail", 0.6); else if (k < o.n * 0.4) poke(agents[j], "touch-head", 0.6);
+          break;
+        }
+      }
+    }
+    if (kick > 0) poke(a, "touch-tail", 0.45); else if (kick < 0) poke(a, "touch-head", 0.45);
+    let sig = "";
+    for (const key of KEYS) if ((a.t[key] || 0) > 0) { sig += key + "|"; a.t[key] -= dt; }
+    if (sig !== a.sig) { a.sig = sig; a.b.clearInput(); sig.split("|").filter(Boolean).forEach((k) => a.b.stimulate(k, true)); }
+    a.acc += dt * 1.4;
+    while (a.acc >= a.b.p.dt) { a.b.step(); a.acc -= a.b.p.dt; }
+    const r = a.b.readout();
+    const rel = ((r.motorFwd - r.motorBack) + r.drive - a.base) * 7;
+    const reversing = rel < -0.25 && ((a.t["nose-touch"] || 0) > 0 || (a.t["touch-head"] || 0) > 0 || rel < -0.6);
+    const mdrive = reversing ? clamp(rel, -1.2, -0.3) : 0.45 + clamp(rel, -0.2, 1) * 0.6;
+    const act = clamp(r.arousal * 4 + Math.abs(mdrive) * 0.6, 0, 1.2);
+    a.eatT = Math.max(0, a.eatT - dt);
+    const smelling = nd < smellR && !reversing;
+    const aim = smelling ? Math.atan2(foods[nf].y - hy, foods[nf].x - hx) : null;
+    const omega = (reversing ? -1 : 1) * (1.6 + Math.abs(mdrive) * 5 + sv * 4);
+    const speed = (reversing ? mdrive * 22 : 9 + mdrive * 16) * (smelling && nd < 30 ? 0.55 : 1) + (reversing ? 0 : sv * 6);
+    w.update(dt, reduce ? 0 : omega, 0.36 + act * 0.4, reduce ? 0 : speed, W, H, aim);
+    a.label = a.eatT > 0 ? "eating"
+      : (a.t["nose-touch"] || 0) > 0 ? (mdrive < 0 ? "bumped, backing up" : "bumped something")
+      : (a.t["touch-tail"] || 0) > 0 ? "poked from behind"
+      : (a.t["touch-head"] || 0) > 0 ? "poked on the head"
+      : reversing ? "backing up"
+      : smelling ? "smells food"
+      : "crawling";
+  }
+}
+const lcv = $("fieldLabels"), lctx = lcv.getContext("2d");
+function sizeLabels() { lcv.width = window.innerWidth; lcv.height = window.innerHeight; }
+function drawLabels() {
+  lctx.clearRect(0, 0, lcv.width, lcv.height);
+  lctx.font = "11px 'Martian Mono', ui-monospace, monospace"; lctx.textBaseline = "middle";
+  const sx = lcv.width / field.W, sy = lcv.height / field.H;
+  for (const a of agents) {
+    const x = a.w.pts[0][0] * sx, y = a.w.pts[0][1] * sy;
+    if (x < -20 || y < -20 || x > lcv.width + 20 || y > lcv.height + 20) continue;
+    const text = a.name + " " + a.label + (a.eaten ? "  (" + a.eaten + " eaten)" : "");
+    const tw = lctx.measureText(text).width;
+    lctx.fillStyle = "rgba(3,5,15,0.78)"; lctx.fillRect(x + 12, y - 18, tw + 12, 18);
+    lctx.fillStyle = a.eatT > 0 ? "#c9ff2e" : "#ece8e1"; lctx.fillText(text, x + 18, y - 9);
+  }
+}
+
+/* ---------- globe ---------- */
+const globe = $("globe"), gctx = globe.getContext("2d");
+const byClass = { sensory: [], inter: [], motor: [], other: [] };
+neurons.forEach((n, i) => byClass[n.class].push(i));
+const pos = new Array(neurons.length);
+{
+  const bands = { sensory: [0.0, 0.34], inter: [0.34, 0.66], motor: [0.66, 0.97], other: [0.05, 0.95] };
+  for (const cls of Object.keys(byClass)) {
+    const list = byClass[cls];
+    const [a, b] = bands[cls];
+    list.forEach((idx, j) => {
+      const lat = Math.acos(1 - 2 * (a + (b - a) * ((j + 0.5) / list.length)));
+      const lon = (j * 2.399963 + (cls === "other" ? 1.7 : 0)) % (Math.PI * 2);
+      pos[idx] = [Math.sin(lat) * Math.cos(lon), Math.cos(lat), Math.sin(lat) * Math.sin(lon)];
+    });
+  }
+}
+const nIndex = new Map(neurons.map((n, i) => [n.id, i]));
+const arcs = CONNECTOME.edges.filter((e) => e.k === "chem").map((e) => [nIndex.get(e.s), nIndex.get(e.t), e.w]);
+const COL = { sensory: "#c9ff2e", inter: "#c65cf0", motor: "#6f6cff", other: "#ece8e1" };
+let rotY = 0.6, rotX = -0.25, spin = reduce ? 0 : 0.12, dragging = false, lastX = 0, lastY = 0, moved = 0;
+let gW = 0, gH = 0, proj = [];
+function sizeGlobe() {
+  const r = globe.getBoundingClientRect(); const dpr = Math.min(2, window.devicePixelRatio || 1);
+  gW = r.width; gH = r.height; globe.width = gW * dpr; globe.height = gH * dpr; gctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+function drawGlobe() {
+  const R = Math.min(gW, gH) * 0.4, cx = gW / 2, cy = gH / 2;
+  gctx.clearRect(0, 0, gW, gH);
+  const cyw = Math.cos(rotY), syw = Math.sin(rotY), cxw = Math.cos(rotX), sxw = Math.sin(rotX);
+  const P = proj.length === pos.length ? proj : (proj = new Array(pos.length));
+  for (let i = 0; i < pos.length; i++) {
+    const [x, y, z] = pos[i];
+    const x1 = x * cyw + z * syw, z1 = -x * syw + z * cyw;
+    const y2 = y * cxw - z1 * sxw, z2 = y * sxw + z1 * cxw;
+    P[i] = [cx + x1 * R, cy - y2 * R, z2, x1, y2];
+  }
+  // sphere rim
+  gctx.strokeStyle = "rgba(236,232,225,0.35)"; gctx.lineWidth = 1; gctx.beginPath(); gctx.arc(cx, cy, R, 0, 6.283); gctx.stroke();
+  gctx.strokeStyle = "rgba(51,51,234,0.5)";
+  for (const lat of [-0.5, 0, 0.5]) {
+    gctx.beginPath(); let started = false;
+    for (let a = 0; a <= 64; a++) {
+      const lon = (a / 64) * 6.283, rr = Math.sqrt(1 - lat * lat);
+      const x = rr * Math.cos(lon), z = rr * Math.sin(lon), y = lat;
+      const x1 = x * cyw + z * syw, z1 = -x * syw + z * cyw, y2 = y * cxw - z1 * sxw, z2 = y * sxw + z1 * cxw;
+      if (z2 < 0) { started = false; continue; }
+      const px = cx + x1 * R, py = cy - y2 * R;
+      if (!started) { gctx.moveTo(px, py); started = true; } else gctx.lineTo(px, py);
+    }
+    gctx.stroke();
+  }
+  // arcs from active presynaptic neurons
+  const act = brain.act;
+  let drawn = 0;
+  gctx.lineWidth = 1.1;
+  for (let k = 0; k < arcs.length && drawn < 170; k++) {
+    const [s, t, w] = arcs[k];
+    const a = act[s] * (0.3 + Math.min(1, w / 8));
+    if (a < 0.18) continue;
+    const A = P[s], B = P[t];
+    if (A[2] < -0.15 && B[2] < -0.15) continue;
+    const mx = (A[0] + B[0]) / 2, my = (A[1] + B[1]) / 2;
+    const dx = mx - cx, dy = my - cy, d = Math.hypot(dx, dy) || 1;
+    const lift = 0.35 * Math.hypot(A[0] - B[0], A[1] - B[1]);
+    gctx.strokeStyle = "rgba(201,255,46," + clamp(a * 0.9, 0.12, 0.85).toFixed(2) + ")";
+    gctx.beginPath(); gctx.moveTo(A[0], A[1]); gctx.quadraticCurveTo(mx + (dx / d) * lift, my + (dy / d) * lift, B[0], B[1]); gctx.stroke();
+    drawn++;
+  }
+  // neurons, back to front
+  const order = P.map((_, i) => i).sort((a, b) => P[a][2] - P[b][2]);
+  for (const i of order) {
+    const p = P[i], front = p[2] >= 0, a = act[i];
+    const r = (front ? 2.6 : 1.7) + a * 5;
+    gctx.globalAlpha = front ? 1 : 0.35;
+    gctx.fillStyle = COL[neurons[i].class];
+    gctx.beginPath(); gctx.arc(p[0], p[1], r, 0, 6.283); gctx.fill();
+    if (a > 0.35) { gctx.strokeStyle = "#ece8e1"; gctx.lineWidth = 1; gctx.beginPath(); gctx.arc(p[0], p[1], r + 2.5, 0, 6.283); gctx.stroke(); }
+    if (state.picked === i) { gctx.strokeStyle = "#c9ff2e"; gctx.lineWidth = 1.6; gctx.beginPath(); gctx.arc(p[0], p[1], r + 6, 0, 6.283); gctx.stroke(); }
+  }
+  gctx.globalAlpha = 1;
+}
+function pickAt(mx, my) {
+  let best = -1, bd = 14 * 14;
+  for (let i = 0; i < proj.length; i++) { if (proj[i][2] < 0) continue; const d = (proj[i][0] - mx) ** 2 + (proj[i][1] - my) ** 2; if (d < bd) { bd = d; best = i; } }
+  return best;
+}
+function describePick() {
+  if (state.picked == null) return;
+  const n = neurons[state.picked];
+  let ins = 0, outs = 0;
+  for (const e of CONNECTOME.edges) { if (e.t === n.id) ins++; if (e.s === n.id) outs++; }
+  $("pick").innerHTML = "<b style='color:var(--lime)'>" + n.id + "</b> &nbsp;" + n.class + (n.type ? " / " + n.type.toLowerCase() : "") + "<br>" + ins + " incoming and " + outs + " outgoing connections. " + (state.pickedOn ? "Firing now. Click it again to stop." : "Resting.");
+}
+globe.addEventListener("pointerdown", (e) => { dragging = true; moved = 0; lastX = e.clientX; lastY = e.clientY; globe.setPointerCapture(e.pointerId); globe.style.cursor = "grabbing"; });
+globe.addEventListener("pointermove", (e) => {
+  if (!dragging) return;
+  const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY; moved += Math.abs(dx) + Math.abs(dy);
+  rotY += dx * 0.008; rotX = clamp(rotX + dy * 0.006, -1.2, 1.2);
+});
+globe.addEventListener("pointerup", (e) => {
+  dragging = false; globe.style.cursor = "grab";
+  if (moved < 5) {
+    const r = globe.getBoundingClientRect(); const i = pickAt(e.clientX - r.left, e.clientY - r.top);
+    if (i >= 0) { state.auto = false; state.autoKey = null; state.stim.clear(); if (state.picked === i) state.pickedOn = !state.pickedOn; else { state.picked = i; state.pickedOn = true; } refreshInputs(); describePick(); }
+  }
+});
+
+/* ---------- genome section ---------- */
+const CHR = [["I", 15072434], ["II", 15279421], ["III", 13783801], ["IV", 17493829], ["V", 20924180], ["X", 17718942]];
+{
+  const max = 21000000, host = $("chroms");
+  CHR.forEach(([n, len]) => {
+    const row = document.createElement("div"); row.className = "chrom";
+    row.innerHTML = "<span>chr " + n + "</span><div style='position:relative'><div class='bar' style='width:" + (len / max * 100).toFixed(2) + "%' title='chromosome " + n + ", " + len.toLocaleString() + " bases'></div></div><span class='len'>" + (len / 1e6).toFixed(2) + " Mb</span>";
+    host.appendChild(row);
+  });
+  const mt = document.createElement("div"); mt.className = "chrom";
+  mt.innerHTML = "<span>chr MT</span><div class='mono' style='opacity:.7'>circular, too small to see at this scale</div><span class='len'>13.8 kb</span>"; host.appendChild(mt);
+  const total = CHR.reduce((a, c) => a + c[1], 0);
+  const facts = [[(total / 1e6).toFixed(1) + " Mb", "six chromosomes, summed from the reference"], ["~65%", "of the letters are A or T"], ["19,985", "protein coding genes, WormBase 2022"], ["49,187", "genes of all kinds in the same annotation"], ["302", "neurons wired in this page"], ["959", "somatic cells in the adult hermaphrodite"]];
+  $("facts").innerHTML = facts.map(([n, l]) => "<div><div class='n'>" + n + "</div><div class='l'>" + l + "</div></div>").join("");
+}
+$("fasta").addEventListener("change", async (ev) => {
+  const f = ev.target.files[0]; if (!f) return;
+  const out = $("gcOut"); out.textContent = "Reading " + f.name + " in your browser...";
+  const dec = new TextDecoder(); const seqs = []; let cur = null; let carry = "";
+  const WIN = 100000;
+  const flushWin = () => { if (cur.win.n >= WIN) { cur.gc.push(cur.win.gc / Math.max(1, cur.win.acgt)); cur.win = { n: 0, gc: 0, acgt: 0 }; } };
+  const feed = (text) => {
+    const lines = (carry + text).split("\n"); carry = lines.pop();
+    for (const line of lines) {
+      if (line.startsWith(">")) { cur = { name: line.slice(1).trim().split(/\s+/).slice(0, 2).join(" "), len: 0, gc: [], win: { n: 0, gc: 0, acgt: 0 } }; seqs.push(cur); continue; }
+      if (!cur) continue;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line.charCodeAt(i) | 32; cur.len++; cur.win.n++;
+        if (ch === 103 || ch === 99) { cur.win.gc++; cur.win.acgt++; } else if (ch === 97 || ch === 116) cur.win.acgt++;
+        if (cur.win.n >= WIN) flushWin();
+      }
+    }
+  };
+  try {
+    const CH = 4 * 1024 * 1024;
+    for (let o = 0; o < f.size; o += CH) { feed(dec.decode(await f.slice(o, o + CH).arrayBuffer(), { stream: true })); out.textContent = "Reading... " + Math.round(Math.min(100, (o + CH) / f.size * 100)) + "%"; await new Promise((r) => setTimeout(r)); }
+    feed("\n");
+  } catch (e) { out.textContent = "Could not read that file."; return; }
+  if (!seqs.length) { out.textContent = "No FASTA records found. The file should start with a line beginning with >."; return; }
+  out.innerHTML = "";
+  for (const s of seqs) {
+    const gcAll = s.gc.length ? s.gc.reduce((a, b) => a + b, 0) / s.gc.length : 0;
+    const wrap = document.createElement("div");
+    wrap.innerHTML = "<div style='display:flex;justify-content:space-between;gap:10px'><span>" + s.name + "</span><span>" + s.len.toLocaleString() + " bases, GC " + (gcAll * 100).toFixed(1) + "%</span></div>";
+    const cv = document.createElement("canvas"); cv.width = Math.max(1, s.gc.length); cv.height = 1;
+    const cx = cv.getContext("2d"); const im = cx.createImageData(cv.width, 1);
+    s.gc.forEach((g, i) => { const v = clamp((g - 0.28) / 0.14, 0, 1); const c = v > 0.75 ? PAL.lime : v > 0.5 ? PAL.orchid : v > 0.25 ? PAL.violet : PAL.blue; im.data.set([c[0], c[1], c[2], 255], i * 4); });
+    cx.putImageData(im, 0, 0); wrap.appendChild(cv); out.appendChild(wrap);
+  }
+  const note = document.createElement("div"); note.style.opacity = ".65"; note.textContent = "Each pixel is a 100 kb window. Lime is the most GC rich, blue the least."; out.appendChild(note);
+});
+
+/* ---------- anatomy draw on scroll ---------- */
+const anat = $("anat"), drawPaths = anat.querySelectorAll(".draw");
+function anatProgress() {
+  if (reduce) return;
+  const r = anat.getBoundingClientRect(), vh = window.innerHeight;
+  const p = clamp((vh * 0.92 - r.top) / (vh * 0.55), 0, 1);
+  drawPaths.forEach((el, i) => { const q = clamp(p * 1.4 - i * 0.05, 0, 1); el.style.strokeDashoffset = String(1 - q); });
+}
+
+/* ---------- main loop ---------- */
+let last = performance.now(), acc = 0, scrollY = window.scrollY, scrollV = 0, uiT = 0;
+const vis = { globe: true, body: true };
+if ("IntersectionObserver" in window) {
+  const io = new IntersectionObserver((es) => es.forEach((e) => { vis[e.target.dataset.v] = e.isIntersecting; }));
+  globe.dataset.v = "globe"; bodyStage.c.dataset.v = "body"; io.observe(globe); io.observe(bodyStage.c);
+}
+function loop(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const sy = window.scrollY; const dyF = sy - scrollY; const kick = dyF > 12 ? 1 : dyF < -12 ? -1 : 0; scrollV += ((sy - scrollY) / Math.max(dt, 0.001) / 1000 - scrollV) * Math.min(1, dt * 6); scrollY = sy;
+  autoStep(dt);
+  acc += dt * 1.4;
+  while (acc >= brain.p.dt) { brain.step(); acc -= brain.p.dt; }
+  const r = brain.readout();
+  const drive = clamp(r.drive * 4, -1.4, 1.4);
+  const sv = Math.abs(scrollV);
+  updateAgents(dt, kick, Math.min(sv, 3));
+  const bw = bodyStage.worms[0];
+  { const mdrive = clamp((r.motorFwd - r.motorBack) * 6 + drive * 0.6, -1.5, 1.5); const act = clamp(r.arousal * 4 + Math.abs(mdrive), 0, 1.2);
+    bw.update(dt, reduce ? 0 : (mdrive >= 0 ? 1 : -1) * (1.2 + Math.abs(mdrive) * 6), 0.3 + act * 0.45, reduce ? 0 : mdrive * 18, bodyStage.W, bodyStage.H); }
+  field.render(dt, scrollY);
+  drawLabels();
+  if (vis.body) bodyStage.render(dt, 0);
+  if (vis.globe) { if (!dragging) rotY += spin * dt; drawGlobe(); }
+  uiT += dt;
+  if (uiT > 0.1) {
+    uiT = 0;
+    const s = steer(r);
+    $("heroState").textContent = s.mode; $("heroActive").textContent = r.active; $("steerMode").textContent = s.mode; $("bodyNote").textContent = s.mode + " / drive " + r.drive.toFixed(2);
+    $("mF").textContent = r.forward.toFixed(2); $("mB").textContent = r.backward.toFixed(2); $("mA").textContent = r.arousal.toFixed(2);
+    $("bF").style.width = clamp(r.forward * 100, 0, 100) + "%"; $("bB").style.width = clamp(r.backward * 100, 0, 100) + "%"; $("bA").style.width = clamp(r.arousal * 250, 0, 100) + "%";
+    $("sTemp").textContent = s.options.temperature.toFixed(2); $("sTop").textContent = s.options.top_p.toFixed(2); $("sRep").textContent = s.options.repeat_penalty.toFixed(2); $("sNum").textContent = s.options.num_predict;
+    if (state.picked != null) describePick();
+  }
+  anatProgress();
+  requestAnimationFrame(loop);
+}
+function onResize() { field.resize(); bodyStage.resize(); seedWorms(); sizeGlobe(); sizeLabels(); }
+let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(onResize, 150); });
+sizeGlobe(); sizeLabels(); refreshInputs(); state.autoTimer = 1.2;
+requestAnimationFrame(loop);
+})();
+</script>

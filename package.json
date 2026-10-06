@@ -1,0 +1,15 @@
+{
+  "name": "werm",
+  "version": "0.1.0",
+  "description": "A 302 neuron model built on the real C. elegans connectome, with a steering layer for local language models.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/network.test.mjs",
+    "sim": "node src/cli.mjs sim",
+    "chat": "node src/cli.mjs chat",
+    "build:site": "node scripts/build_site.mjs",
+    "build:data": "python3 scripts/build_connectome.py"
+  },
+  "engines": { "node": ">=20" }
+}
