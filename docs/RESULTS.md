@@ -130,7 +130,7 @@ Things to know before reading its results, from writing it:
 - **The worm condition is close to five fixed settings.** Prompts in one category (questions, thanks, complaints, long pastes, plain statements) poke the same neurons, so they get nearly the same settings. The random condition draws fresh settings for every prompt. The two match in mean and spread, but the worm's variation is all between categories.
 - **Three of the four moods occur** with these prompts, at the current parameters: reversing 40 percent, dwelling 40 percent, foraging 20 percent. The resting tone line is never exercised.
 - **The random condition draws each setting on its own**, while the worm's settings move together.
-- **Experiment 2 keeps the whole conversation history**, as the chat command does. Over 200 turns that will pass a small model's context window, and the oldest turns will be cut.
+- **Experiment 2 keeps the whole conversation history**, as the `connect` command does. Over 200 turns that will pass a small model's context window, and the oldest turns will be cut.
 
 ## 7. What these results do not show
 

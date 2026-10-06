@@ -13,7 +13,7 @@ npm run build:site        # rebuilds site/index.html and site/artifact.html
 npm run sweep             # parameter sweep, docs/results/sweep.csv
 npm run experiments       # null models and reservoir benchmark, docs/results/
 node src/cli.mjs sim --stim touch-tail --seconds 3
-node src/cli.mjs chat --model llama3.2     # needs Ollama
+node src/cli.mjs connect --model llama3.2  # needs Ollama, or --base-url for any OpenAI style server
 bash scripts/fetch_genome.sh               # needs internet, about 100 MB
 ```
 

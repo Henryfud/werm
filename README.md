@@ -4,7 +4,7 @@
 
 **W**iring-**E**ncoded **R**ecurrent **M**odulator
 
-A 302 neuron model built on the real wiring diagram of *Caenorhabditis elegans*, with a small steering layer that lets its state nudge a local language model. It runs in a browser tab, in Node, or in a terminal chat against Ollama.
+A 302 neuron model built on the real wiring diagram of *Caenorhabditis elegans*, with a small steering layer that lets its state nudge a local language model. It runs in a browser tab, in Node, or connected to a language model on your own computer through Ollama or any OpenAI style local server.
 
 [werm.si](https://werm.si) · [@WERM_si on X](https://x.com/WERM_si)
 
@@ -57,14 +57,76 @@ npm run experiments    # null models and reservoir benchmark, writes docs/result
 
 They use every CPU core and take a few minutes.
 
-### Chat with a worm steered local model
+## Run it locally with Ollama or any local engine
+
+WERM runs entirely on your own computer. Connect it to a language model running locally and every message you send goes through the worm first: it pokes the worm's sensory neurons, the brain runs for a moment, and the worm's state sets the model's sampling settings and a one line tone. Nothing leaves your machine.
+
+### With Ollama
+
+1. Install Ollama from [ollama.com/download](https://ollama.com/download) and open it (or run `ollama serve`).
+2. Download a model. Any model you have works, just use its name.
+3. Connect the worm:
 
 ```bash
 ollama pull llama3.2
-node src/cli.mjs chat --model llama3.2
+node src/cli.mjs connect --model llama3.2
 ```
 
-Each message pokes the worm (a question, a thank you, an angry word, a long paste), the network runs for a moment, and its state becomes sampling settings and a tone line for the model. The terminal prints both so you can see the link. To measure whether it changes anything:
+If Ollama is not running, or the model is missing, the command says so and tells you what to run. Use `--host` if Ollama is not on `http://localhost:11434`.
+
+### With LM Studio, llama.cpp, vLLM or another engine
+
+Anything that serves the OpenAI chat completions API works. Start the engine's local server, then point WERM at it with `--base-url` and the model name the server uses:
+
+```bash
+node src/cli.mjs connect --base-url http://localhost:1234/v1 --model YOUR_MODEL
+```
+
+| engine | how to start its server | `--base-url` |
+| --- | --- | --- |
+| LM Studio | Developer tab, start the local server | `http://localhost:1234/v1` |
+| llama.cpp | `llama-server -m your-model.gguf` | `http://localhost:8080/v1` |
+| vLLM | `vllm serve your-model` | `http://localhost:8000/v1` |
+| Ollama, OpenAI style | runs with Ollama | `http://localhost:11434/v1` |
+
+On these servers WERM sends `temperature`, `top_p` and `max_tokens`. The repeat penalty is not part of that API, so it is left out. If your server needs a key, set `WERM_API_KEY`.
+
+### In your own code, with any engine
+
+```bash
+node src/cli.mjs steer "why is my code broken?"
+```
+
+prints what the worm would send for that message, without contacting any model:
+
+```json
+{
+  "stimuli": ["nose-touch", "noxious"],
+  "mode": "reversing",
+  "ollama_options": { "temperature": 0.31, "top_p": 0.72, "repeat_penalty": 1.11, "num_predict": 159 },
+  "openai_params": { "temperature": 0.31, "top_p": 0.72, "max_tokens": 159 },
+  "system_prompt": "You are a helpful assistant whose tone is nudged by a simulated C. elegans nervous system. ..."
+}
+```
+
+In JavaScript you can use the pieces directly:
+
+```js
+import fs from "node:fs";
+import { WormBrain } from "./src/network.mjs";
+import { steer, stimuliFromText, applyStimuli, systemPrompt } from "./src/steer.mjs";
+
+const worm = new WormBrain(JSON.parse(fs.readFileSync("data/connectome.json", "utf8")));
+worm.run(1);                                             // settle
+applyStimuli(worm, stimuliFromText("thanks, that helped"), true);
+worm.run(1.5);                                           // let the brain respond
+const { options, mode } = steer(worm.readout());          // sampling settings, Ollama names
+// send options and systemPrompt(mode) to your engine
+```
+
+### Does it change anything?
+
+Not measured yet. `scripts/steer-eval.mjs` compares default settings, worm settings and random settings over 200 prompts:
 
 ```bash
 node scripts/steer-eval.mjs --dry-run --limit 5     # offline, prints the planned settings
@@ -103,7 +165,7 @@ Writes `site/index.html`. Set `GITHUB_URL` or `SITE_URL` to change the links on 
 ### Checks
 
 ```bash
-npm test               # unit tests, 29 of them
+npm test               # unit tests, 36 of them
 npm run check          # no em dashes in prose, data profile matches docs/research/02
 npm ci && npx playwright install chromium && npm run test:site   # headless browser smoke test
 ```
@@ -121,8 +183,9 @@ src/network.mjs             the neuron model
 src/reflex.mjs              reflex checks, specificity against random pokes, head versus tail contrast
 src/graphs.mjs              shuffled and random versions of the wiring
 src/steer.mjs               worm state to sampling settings and tone
-src/ollama.mjs              tiny client for a local Ollama server
-src/cli.mjs                 sim and chat commands
+src/ollama.mjs              client for a local Ollama server
+src/openai.mjs              client for any OpenAI style local server (LM Studio, llama.cpp, vLLM)
+src/cli.mjs                 sim, connect and steer commands
 scripts/                    data build, genome, sweep, experiments, checks, site build
 site/template.html          the page, with placeholders
 test/                       unit tests and the browser smoke test
@@ -142,6 +205,7 @@ If you want a faithful biophysical simulation, use [OpenWorm's c302](https://git
 ## Next
 
 - Run the steering evaluation against a local model and add the numbers to `docs/RESULTS.md`.
+- Pass the repeat penalty to OpenAI style servers that accept it as an extra field.
 - A receptor based sign map, using the acetylcholine and glutamate maps (Pereira et al. 2015, Serrano-Saiz et al. 2013), to test the head touch explanation.
 - A stronger model: fit parameters against a larger set of reflexes with a held out set, add slow neuromodulators, add habituation, compare with c302, and run on the developmental wiring of Witvliet et al. 2021.
 

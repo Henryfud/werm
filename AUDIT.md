@@ -13,6 +13,7 @@ These were choices, not oversights.
 | Do the full roadmap except Phase 5 (stronger model) | Phase 5 stays listed under "Next" in the README |
 | Write the steering evaluation, do not run it | `scripts/steer-eval.mjs` exists with tests and a dry run. No language model was installed or run. The site and README say the steering effect is unmeasured |
 | Keep the site's look, including worms crawling over the text | Handoff issue 9 closed as "keep" |
+| No chat on the website | The site explains how to connect the worm to a local engine yourself. It shows no conversation |
 | Repository `Henryfud/werm`, private first | |
 | Host on Netlify from the GitHub repo, domain werm.si | `netlify.toml` added |
 | X account @WERM_si, logo from `werm-profile.png` | Logo is the favicon, the header mark and the link preview image |
@@ -64,6 +65,7 @@ These were choices, not oversights.
 | Errors | `src/ollama.mjs` now says plainly when Ollama is not running or the model is missing |
 | `stimuliFromText` on odd input | It used to throw on `null` and matched parts of words ("know" fired `noxious`). It now accepts anything, matches whole words, and counts length in characters, not UTF-16 units. Tested |
 | System prompt | never asks the model to claim feelings or consciousness. Tested |
+| Running locally | The command is now `connect` (`chat` still works). It checks for Ollama and the model before starting and says what to run if either is missing. It no longer crashes when input closes, and it keeps lines typed while the model is answering. `--base-url` connects to any OpenAI style local server (LM Studio, llama.cpp, vLLM). `steer` prints the worm's settings as JSON for any other engine. All tested against fake servers in `test/engines.test.mjs` |
 | Evaluation | `scripts/steer-eval.mjs`, 200 prompts in `data/eval-prompts.json`, `--dry-run` works offline. Design notes in `docs/RESULTS.md` |
 
 ## 5. Site

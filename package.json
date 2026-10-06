@@ -6,12 +6,12 @@
   "license": "MIT",
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "sim": "node src/cli.mjs sim",
-    "chat": "node src/cli.mjs chat",
-    "build:site": "node scripts/build_site.mjs",
-    "build:data": "python3 scripts/build_connectome.py",
     "test:site": "node test/site.smoke.mjs",
     "check": "node scripts/check_prose.mjs && node scripts/check_data.mjs",
+    "sim": "node src/cli.mjs sim",
+    "connect": "node src/cli.mjs connect",
+    "build:site": "node scripts/build_site.mjs",
+    "build:data": "python3 scripts/build_connectome.py",
     "sweep": "node scripts/sweep.mjs",
     "experiments": "node scripts/null-models.mjs && node scripts/reservoir.mjs"
   },

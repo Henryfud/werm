@@ -192,6 +192,14 @@ section.about { padding-block: 40px 0; }
 .anat .hot { stroke: var(--lime); }
 .anat text { font-family: var(--mono); font-size: 11px; fill: var(--paper); }
 .anat line.lead { stroke: var(--dim); stroke-width: 1; stroke-dasharray: 3 3; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 20px; }
+.step { display: grid; align-content: start; }
+.step.wide { grid-column: 1 / -1; }
+.step .code { border: 0; border-radius: 0; border-bottom: 1px dashed var(--rule); }
+.step > p.mono { margin: 0; padding: 12px 14px 16px; line-height: 1.7; opacity: 0.8; }
+.step code, #run .mono code { font-family: var(--mono); background: #101436; padding: 1px 5px; border-radius: 3px; }
+.params.engines td:last-child { color: var(--lime); word-break: break-all; }
+#runSample { margin-top: 4px; }
 .glossary { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 22px 32px; margin-top: 30px; }
 .glossary h4 { font-family: var(--mono); font-weight: 500; font-size: 12px; color: var(--lime); margin: 0 0 6px; }
 .glossary p { margin: 0; font-size: 15px; opacity: 0.9; }
@@ -266,6 +274,7 @@ footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-
         <a href="#brain">Brain</a>
         <a href="#body">Body</a>
         <a href="#genome">Genome</a>
+        <a href="#run">Run it</a>
         <a href="#notes">Notes</a>
       </nav>
       <div class="navend">
@@ -358,13 +367,7 @@ footer .big { font-size: clamp(40px, 8vw, 110px); letter-spacing: -0.05em; line-
           </table>
         </div>
         <div>
-          <div class="code" id="steerCode"><button class="copy" data-copy="steerCode">copy</button>git clone GH_URL
-cd werm
-npm test
-node src/cli.mjs sim --stim touch-tail
-ollama pull llama3.2
-node src/cli.mjs chat --model llama3.2</div>
-          <p class="mono" style="margin-top:14px;opacity:.75;line-height:1.7">Chat mode pokes the worm based on your message (a question, a thank you, an angry word), reads its state, and sends the sampling settings to Ollama on your own machine. Nothing leaves it.</p>
+          <p class="mono" style="margin:0;opacity:.8;line-height:1.7">The same code runs on your own computer, where you can connect it to Ollama or any other local engine and send it messages. The steps are in <a href="#run" style="color:var(--lime)">run it on your computer</a> below.</p>
         </div>
       </div>
     </div>
@@ -439,6 +442,54 @@ node scripts/gene_windows.mjs data/genome/annotation.gff.gz</div>
         </div>
       </div>
       <div class="facts" id="facts"></div>
+    </div>
+  </section>
+
+  <section class="band solid" id="run">
+    <div class="wrap">
+      <h2>Run it on your computer</h2>
+      <p class="sub">Everything on this page runs on your own machine too: the brain, the experiments, and the link to a language model. Nothing is sent anywhere. You need Node 20 or newer (free from nodejs.org), and for the language model part, a local engine such as Ollama or LM Studio.</p>
+      <div class="steps">
+        <div class="frame step">
+          <div class="bar"><span>1 / GET THE CODE</span><span>about a minute</span></div>
+          <div class="code" id="runGet"><button class="copy" data-copy="runGet">copy</button>git clone GH_URL
+cd werm
+npm test</div>
+          <p class="mono">No packages to install. The tests check the wiring, the brain and the steering in a few seconds.</p>
+        </div>
+        <div class="frame step">
+          <div class="bar"><span>2 / POKE THE BRAIN</span><span>terminal</span></div>
+          <div class="code" id="runSim"><button class="copy" data-copy="runSim">copy</button>node src/cli.mjs sim --stim touch-tail --seconds 2</div>
+          <p class="mono">This touches the worm's tail and prints the brain every half second. You should see drive go positive: it crawls forward. You can also open <code>site/index.html</code> in any browser. This whole page works offline.</p>
+        </div>
+        <div class="frame step">
+          <div class="bar"><span>3A / CONNECT OLLAMA</span><span>ollama.com/download</span></div>
+          <div class="code" id="runOllama"><button class="copy" data-copy="runOllama">copy</button>ollama pull llama3.2
+node src/cli.mjs connect --model llama3.2</div>
+          <p class="mono">Install Ollama and open it, then download a model. Any model you have pulled works, just change the name. If something is missing, the command tells you what to do.</p>
+        </div>
+        <div class="frame step">
+          <div class="bar"><span>3B / OR ANY OTHER LOCAL ENGINE</span><span>OpenAI style server</span></div>
+          <div class="code" id="runOther"><button class="copy" data-copy="runOther">copy</button>node src/cli.mjs connect \
+  --base-url http://localhost:1234/v1 \
+  --model YOUR_MODEL</div>
+          <table class="params engines" aria-label="Usual local server addresses">
+            <tr><th>engine</th><th>start its server, then use</th></tr>
+            <tr><td>LM Studio</td><td>http://localhost:1234/v1</td></tr>
+            <tr><td>llama.cpp (llama-server)</td><td>http://localhost:8080/v1</td></tr>
+            <tr><td>vLLM</td><td>http://localhost:8000/v1</td></tr>
+            <tr><td>Ollama, OpenAI style</td><td>http://localhost:11434/v1</td></tr>
+          </table>
+          <p class="mono">Temperature, top_p and the length limit are sent. The repeat penalty is not part of that API, so it is left out.</p>
+        </div>
+        <div class="frame step wide">
+          <div class="bar"><span>4 / USE IT IN YOUR OWN CODE</span><span>any engine, any language</span></div>
+          <div class="code" id="runSteer"><button class="copy" data-copy="runSteer">copy</button>node src/cli.mjs steer "why is my code broken?"</div>
+          <p class="mono">Prints what the worm would send for that message as JSON: the neurons it poked, its state, the sampling settings under both Ollama and OpenAI names, and the tone line. Pass those to whatever engine you use. In JavaScript you can import <code>WormBrain</code> from <code>src/network.mjs</code> and <code>steer</code> from <code>src/steer.mjs</code> directly.</p>
+        </div>
+      </div>
+      <h3>How the worm sets the model</h3>
+      <p class="sub">Each message you pass through WERM pokes a group of sensory neurons first. A question bumps the nose, an angry word is something nasty, a thank you smells like food, a long paste hits the head, and anything else nudges the tail. The brain runs for a moment, and its state becomes the model's temperature, top_p, repeat penalty and length limit, plus a one line tone. The model still writes every word. Whether this changes its answers in a way you can measure has not been tested yet. The test is in the repo as <code>scripts/steer-eval.mjs</code>.</p>
     </div>
   </section>
 
@@ -520,16 +571,7 @@ dx/dt = -(1/tau + f) * x + f * amp</div>
         </ul>
 
         <h2 id="n-run">Run it</h2>
-        <p>The whole project is a small Node repository with no build step for the simulation. Clone it, run the tests, try a stimulus, then wire it to a local model if you want to.</p>
-        <div class="code" id="runCode"><button class="copy" data-copy="runCode">copy</button>git clone GH_URL
-cd werm
-npm test
-node src/cli.mjs sim --stim touch-tail
-npm run experiments
-bash scripts/fetch_genome.sh
-ollama pull llama3.2
-node src/cli.mjs chat --model llama3.2</div>
-        <p style="margin-top:1.2em">To rebuild the connectome file from the source workbook, see <code>scripts/build_connectome.py</code>. To rebuild this page, run <code>npm run build:site</code>.</p>
+        <p>The whole project is a small Node repository with no packages to install for the model. The <a href="#run">run it section</a> above has the steps for your own computer, for Ollama and for other local engines. To rerun the experiments behind the results, use <code>npm run sweep</code> and <code>npm run experiments</code>. To rebuild the connectome file from the source workbook, see <code>scripts/build_connectome.py</code>. To rebuild this page, run <code>npm run build:site</code>.</p>
 
         <h2 id="n-sources">Sources</h2>
         <ul class="sources">
